@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import config from './config';
 
 class DatabaseConnection {
   private static instance: DatabaseConnection;
@@ -22,20 +23,14 @@ class DatabaseConnection {
     }
 
     try {
-      const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/?directConnection=true';
-      
-      if (!uri.startsWith('mongodb://') && !uri.startsWith('mongodb+srv://')) {
-        throw new Error('Invalid MongoDB URI: must start with "mongodb://" or "mongodb+srv://"');
-      }
-            
-      await mongoose.connect(uri, {
-        dbName: 'platform-dev', // Explicitly set database name
-        serverSelectionTimeoutMS: 5000, // 5 second timeout
-        socketTimeoutMS: 45000, // 45 second socket timeout
+      await mongoose.connect(config.mongodb.uri, {
+        dbName: config.mongodb.dbName,
+        serverSelectionTimeoutMS: config.mongodb.options.serverSelectionTimeoutMS,
+        socketTimeoutMS: config.mongodb.options.socketTimeoutMS,
       });
       
       this.isConnected = true;
-      console.log('Successfully connected to MongoDB');
+      console.log(`Successfully connected to MongoDB database: ${config.mongodb.dbName}`);
     } catch (error) {
       console.error('MongoDB connection error:', error);
       this.isConnected = false;

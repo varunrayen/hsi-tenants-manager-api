@@ -1,11 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
+import config from './config/config';
 import tenantsRouter from './routes/tenants';
 import DatabaseConnection from './config/database';
-
-dotenv.config();
 
 const app = express();
 
@@ -16,13 +14,19 @@ app.use(express.urlencoded({ extended: true }));
 
 DatabaseConnection.getInstance().connect().catch(console.error);
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+app.get('/health', (_, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    app: config.app.name,
+    version: config.app.version,
+    environment: config.nodeEnv
+  });
 });
 
-app.use('/api/tenants', tenantsRouter);
+app.use(`${config.app.apiPrefix}/tenants`, tenantsRouter);
 
-app.all('*', (req, res) => {
+app.all('*', (_, res) => {
   res.status(404).json({
     success: false,
     error: 'Route not found'

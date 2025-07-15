@@ -1,7 +1,8 @@
 import app from './app';
+import config from './config/config';
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(config.port, () => {
+  console.log(`🚀 ${config.app.name} v${config.app.version} running on port ${config.port}`);
+  console.log(`📊 Environment: ${config.nodeEnv}`);
+  console.log(`🔗 Health check: http://localhost:${config.port}/health`);
 });
