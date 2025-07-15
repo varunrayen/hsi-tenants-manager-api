@@ -1,22 +1,5 @@
-import mongoose, { Document, Schema, Types } from 'mongoose';
-
-export interface ITenant extends Document {
-  tenantId: string;
-  name: string;
-  domain: string;
-  status: 'active' | 'inactive' | 'pending';
-  createdAt: Date;
-  updatedAt: Date;
-  customerId: Types.ObjectId;
-  warehouseId: Types.ObjectId;
-  superAdminId: Types.ObjectId;
-  settings: {
-    timezone: string;
-    currency: string;
-    language: string;
-    features: string[];
-  };
-}
+import mongoose, { Schema } from 'mongoose';
+import { ITenant, ICustomer, IWarehouse, IUser, IRole } from '../types';
 
 const TenantSchema: Schema = new Schema({
   tenantId: { type: String, required: true, unique: true },
@@ -35,123 +18,6 @@ const TenantSchema: Schema = new Schema({
 }, {
   timestamps: true
 });
-
-export const Tenant = mongoose.model<ITenant>('Tenant', TenantSchema);
-
-export interface ICustomer extends Document {
-  tenantId: string;
-  companyName: string;
-  contactPerson: string;
-  email: string;
-  phone: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-  };
-  billingInfo: {
-    planType: string;
-    billingCycle: 'monthly' | 'yearly';
-    paymentMethod: string;
-  };
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface IWarehouse extends Document {
-  tenantId: string;
-  name: string;
-  code: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-  };
-  manager: string;
-  capacity: number;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface IUser extends Document {
-  tenantId: string;
-  username: string;
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  role: 'super_admin' | 'admin' | 'user';
-  isActive: boolean;
-  permissions: string[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface IRole extends Document {
-  tenantId: string;
-  name: string;
-  description: string;
-  permissions: string[];
-  isSystemRole: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface CreateTenantRequest {
-  tenant: {
-    name: string;
-    domain: string;
-  };
-  customer: {
-    companyName: string;
-    contactPerson: string;
-    email: string;
-    phone: string;
-    address: {
-      street: string;
-      city: string;
-      state: string;
-      zipCode: string;
-      country: string;
-    };
-    billingInfo: {
-      planType: string;
-      billingCycle: 'monthly' | 'yearly';
-      paymentMethod: string;
-    };
-  };
-  warehouse: {
-    name: string;
-    code: string;
-    address: {
-      street: string;
-      city: string;
-      state: string;
-      zipCode: string;
-      country: string;
-    };
-    manager: string;
-    capacity: number;
-  };
-  superAdmin: {
-    username: string;
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-  };
-  settings?: {
-    timezone?: string;
-    currency?: string;
-    language?: string;
-    features?: string[];
-  };
-}
 
 const CustomerSchema: Schema = new Schema({
   tenantId: { type: String, required: true },
@@ -217,6 +83,7 @@ const RoleSchema: Schema = new Schema({
   timestamps: true
 });
 
+export const Tenant = mongoose.model<ITenant>('Tenant', TenantSchema);
 export const Customer = mongoose.model<ICustomer>('Customer', CustomerSchema);
 export const Warehouse = mongoose.model<IWarehouse>('Warehouse', WarehouseSchema);
 export const User = mongoose.model<IUser>('User', UserSchema);

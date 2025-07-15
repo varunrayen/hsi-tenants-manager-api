@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CreateTenantRequest } from '../models/tenant';
+import { CreateTenantRequest } from '../types';
 
 export const validateCreateTenant = (req: Request, res: Response, next: NextFunction): void => {
   const { tenant, customer, warehouse, superAdmin }: CreateTenantRequest = req.body;

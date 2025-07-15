@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { Types } from 'mongoose';
 import DatabaseConnection from '../config/database';
-import { ITenant, ICustomer, IWarehouse, IUser, IRole, CreateTenantRequest, Tenant, Customer, Warehouse, User, Role } from '../models/tenant';
+import { CreateTenantRequest } from '../types';
+import { Tenant, Customer, Warehouse, User, Role } from '../models';
 import { generateTenantId, hashPassword } from '../utils/helpers';
 
 export class TenantController {
