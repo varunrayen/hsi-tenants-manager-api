@@ -14,19 +14,32 @@ class DatabaseConnection {
   }
 
   public async connect(): Promise<void> {
-    if (this.isConnected) {
+    // Check if Mongoose already has an active connection
+    if (mongoose.connection.readyState === 1) {
+      this.isConnected = true;
+      console.log('Already connected to MongoDB');
       return;
     }
 
     try {
-      const uri = process.env.MONGODB_URI || '';
-      console.log('uri', uri);
+      const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/?directConnection=true';
       
-      await mongoose.connect(uri);
+      if (!uri.startsWith('mongodb://') && !uri.startsWith('mongodb+srv://')) {
+        throw new Error('Invalid MongoDB URI: must start with "mongodb://" or "mongodb+srv://"');
+      }
+      
+      console.log('Attempting to connect to MongoDB:', uri.replace(/\/\/[^@]*@/, '//***:***@')); // Hide credentials in logs
+      
+      await mongoose.connect(uri, {
+        serverSelectionTimeoutMS: 5000, // 5 second timeout
+        socketTimeoutMS: 45000, // 45 second socket timeout
+      });
+      
       this.isConnected = true;
-      console.log('Connected to MongoDB with Mongoose');
+      console.log('Successfully connected to MongoDB');
     } catch (error) {
       console.error('MongoDB connection error:', error);
+      this.isConnected = false;
       throw error;
     }
   }
@@ -47,7 +60,7 @@ class DatabaseConnection {
   }
 
   public isDbConnected(): boolean {
-    return this.isConnected;
+    return mongoose.connection.readyState === 1;
   }
 }
 

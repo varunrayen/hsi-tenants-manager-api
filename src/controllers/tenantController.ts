@@ -6,7 +6,7 @@ import { generateTenantId, hashPassword } from '../utils/helpers';
 
 export class TenantController {
   constructor() {
-    DatabaseConnection.getInstance().connect();
+    // Database connection is handled in app.ts
   }
 
   public createTenant = async (req: Request, res: Response): Promise<void> => {
