@@ -1,0 +1,2 @@
+- Alwways prefer best practices of NodeJS, Typescript, Express, Mongoose, etc.
+- Keep the Postman collection updated with the latest API endpoints.

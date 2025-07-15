@@ -1,0 +1,163 @@
+{
+  "info": {
+    "name": "Tenants Admin API",
+    "description": "API collection for managing tenants, customers, warehouses, and users in the multi-tenant admin system",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        },
+        "description": "Check if the API server is running"
+      },
+      "response": []
+    },
+    {
+      "name": "Tenants",
+      "item": [
+        {
+          "name": "Create Tenant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenant\": {\n    \"name\": \"Acme Corporation\",\n    \"domain\": \"acme.com\"\n  },\n  \"customer\": {\n    \"companyName\": \"Acme Corporation\",\n    \"contactPerson\": \"John Doe\",\n    \"email\": \"john.doe@acme.com\",\n    \"phone\": \"+1-555-0123\",\n    \"address\": {\n      \"street\": \"123 Main Street\",\n      \"city\": \"New York\",\n      \"state\": \"NY\",\n      \"zipCode\": \"10001\",\n      \"country\": \"USA\"\n    },\n    \"billingInfo\": {\n      \"planType\": \"enterprise\",\n      \"billingCycle\": \"monthly\",\n      \"paymentMethod\": \"credit_card\"\n    }\n  },\n  \"warehouse\": {\n    \"name\": \"Main Warehouse\",\n    \"code\": \"WH001\",\n    \"address\": {\n      \"street\": \"456 Industrial Blvd\",\n      \"city\": \"Brooklyn\",\n      \"state\": \"NY\",\n      \"zipCode\": \"11201\",\n      \"country\": \"USA\"\n    },\n    \"manager\": \"Jane Smith\",\n    \"capacity\": 10000\n  },\n  \"superAdmin\": {\n    \"username\": \"admin\",\n    \"email\": \"admin@acme.com\",\n    \"password\": \"SecurePass123!\",\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\"\n  },\n  \"settings\": {\n    \"timezone\": \"America/New_York\",\n    \"currency\": \"USD\",\n    \"language\": \"en\",\n    \"features\": [\"inventory_management\", \"reporting\", \"user_management\"]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tenants",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tenants"]
+            },
+            "description": "Create a new tenant with associated customer, warehouse, and super admin user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Tenants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tenants?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tenants"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of items per page (default: 10)"
+                }
+              ]
+            },
+            "description": "Retrieve all tenants with pagination support"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tenant by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tenants/{{tenant_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tenants", "{{tenant_id}}"]
+            },
+            "description": "Retrieve a specific tenant by ID with associated customer, warehouse, and super admin details"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Tenant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Tenant Name\",\n  \"domain\": \"updated-domain.com\",\n  \"status\": \"active\",\n  \"settings\": {\n    \"timezone\": \"America/Los_Angeles\",\n    \"currency\": \"USD\",\n    \"language\": \"en\",\n    \"features\": [\"inventory_management\", \"reporting\", \"user_management\", \"analytics\"]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tenants/{{tenant_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tenants", "{{tenant_id}}"]
+            },
+            "description": "Update an existing tenant's information"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Tenant",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tenants/{{tenant_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tenants", "{{tenant_id}}"]
+            },
+            "description": "Delete a tenant and all associated data (customer, warehouse, users, roles)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing tenants"
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "tenant_id",
+      "value": "",
+      "type": "string",
+      "description": "ID of the tenant to operate on"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

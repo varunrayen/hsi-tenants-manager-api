@@ -27,10 +27,9 @@ class DatabaseConnection {
       if (!uri.startsWith('mongodb://') && !uri.startsWith('mongodb+srv://')) {
         throw new Error('Invalid MongoDB URI: must start with "mongodb://" or "mongodb+srv://"');
       }
-      
-      console.log('Attempting to connect to MongoDB:', uri.replace(/\/\/[^@]*@/, '//***:***@')); // Hide credentials in logs
-      
+            
       await mongoose.connect(uri, {
+        dbName: 'platform-dev', // Explicitly set database name
         serverSelectionTimeoutMS: 5000, // 5 second timeout
         socketTimeoutMS: 45000, // 45 second socket timeout
       });
