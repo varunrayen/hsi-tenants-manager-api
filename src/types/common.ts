@@ -14,12 +14,53 @@ export interface BillingInfo {
   paymentMethod: string;
 }
 
+export interface TenantModule {
+  enabled: boolean;
+  name: string;
+}
+
+export interface TenantFeatures {
+  combinedPackAndPrep: boolean;
+  combinedReceiveAndPrep: boolean;
+  dropship: boolean;
+  maximumPalletClearanceStrategy: boolean;
+  multiplePickingStrategies: boolean;
+  optimizedBatching: boolean;
+  rateShopping: boolean;
+}
+
+export interface TenantProfile {
+  businessAddress: string;
+  businessName: string;
+}
+
+export interface ActivitySettings {
+  packing: {
+    boxSelection: boolean;
+  };
+  receiving: {
+    putawayBinLocation: boolean;
+    poEnabled: boolean;
+  };
+}
+
+export interface MetricsConfig {
+  preferredDimensionUnit: string[];
+  preferredWeightUnit: string[];
+}
+
 export interface TenantSettings {
-  timezone: string;
-  currency: string;
-  language: string;
-  features: string[];
+  activities: ActivitySettings;
+  allowConstituentsPickingForBundleOrders: boolean;
+  backOrderEnabled: boolean;
+  blockParentLocations: boolean;
+  enableLocationValidation: boolean;
+  isSTOEnabled: boolean;
+  metricsConfig: MetricsConfig;
+  multiAccountIntegrationSupportEnabled: boolean;
+  isOutboundPlanningEnabled: boolean;
 }
 
 export type TenantStatus = 'active' | 'inactive' | 'pending';
 export type UserRole = 'super_admin' | 'admin' | 'user';
+export type CustomerType = '3PL' | 'Brand';

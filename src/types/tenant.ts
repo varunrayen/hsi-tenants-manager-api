@@ -1,15 +1,26 @@
-import { Document, Types } from 'mongoose';
-import { TenantSettings, TenantStatus } from './common';
+import { Document } from 'mongoose';
+import { 
+  TenantSettings, 
+  TenantFeatures, 
+  TenantProfile, 
+  TenantModule, 
+  CustomerType 
+} from './common';
 
 export interface ITenant extends Document {
-  tenantId: string;
   name: string;
-  domain: string;
-  status: TenantStatus;
-  createdAt: Date;
-  updatedAt: Date;
-  customerId: Types.ObjectId;
-  warehouseId: Types.ObjectId;
-  superAdminId: Types.ObjectId;
+  subdomain: string;
+  active: boolean;
+  apiGateway: string;
+  cubeService: string;
+  socketService: string;
+  enabledSimulations: boolean;
+  features: TenantFeatures;
+  modules: TenantModule[];
+  profile: TenantProfile;
   settings: TenantSettings;
+  integrations: string[];
+  typeOfCustomer: CustomerType[];
+  createdAt: number;
+  updatedAt: number;
 }

@@ -1,9 +1,27 @@
-import { Address, BillingInfo, TenantSettings } from './common';
+import { 
+  Address, 
+  BillingInfo, 
+  TenantSettings, 
+  TenantFeatures, 
+  TenantProfile, 
+  TenantModule, 
+  CustomerType 
+} from './common';
 
 export interface CreateTenantRequest {
   tenant: {
     name: string;
-    domain: string;
+    subdomain: string;
+    apiGateway: string;
+    cubeService: string;
+    socketService: string;
+    enabledSimulations?: boolean;
+    features?: Partial<TenantFeatures>;
+    modules?: TenantModule[];
+    profile: TenantProfile;
+    settings?: Partial<TenantSettings>;
+    integrations?: string[];
+    typeOfCustomer?: CustomerType[];
   };
   customer: {
     companyName: string;
@@ -27,5 +45,4 @@ export interface CreateTenantRequest {
     firstName: string;
     lastName: string;
   };
-  settings?: Partial<TenantSettings>;
 }

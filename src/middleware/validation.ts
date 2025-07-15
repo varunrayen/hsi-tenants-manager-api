@@ -6,8 +6,16 @@ export const validateCreateTenant = (req: Request, res: Response, next: NextFunc
 
   const errors: string[] = [];
 
-  if (!tenant || !tenant.name || !tenant.domain) {
-    errors.push('Tenant name and domain are required');
+  if (!tenant || !tenant.name || !tenant.subdomain) {
+    errors.push('Tenant name and subdomain are required');
+  }
+
+  if (!tenant.apiGateway || !tenant.cubeService || !tenant.socketService) {
+    errors.push('Tenant API gateway, cube service, and socket service URLs are required');
+  }
+
+  if (!tenant.profile || !tenant.profile.businessName || !tenant.profile.businessAddress) {
+    errors.push('Tenant business profile information is required');
   }
 
   if (!customer || !customer.companyName || !customer.contactPerson || !customer.email) {
@@ -22,8 +30,8 @@ export const validateCreateTenant = (req: Request, res: Response, next: NextFunc
     errors.push('Super admin username, email, and password are required');
   }
 
-  if (tenant?.domain && !isValidDomain(tenant.domain)) {
-    errors.push('Invalid domain format');
+  if (tenant?.subdomain && !isValidSubdomain(tenant.subdomain)) {
+    errors.push('Invalid subdomain format');
   }
 
   if (customer?.email && !isValidEmail(customer.email)) {
@@ -52,16 +60,12 @@ export const validateCreateTenant = (req: Request, res: Response, next: NextFunc
 export const validateUpdateTenant = (req: Request, res: Response, next: NextFunction): void => {
   const errors: string[] = [];
 
-  if (req.body.domain && !isValidDomain(req.body.domain)) {
-    errors.push('Invalid domain format');
+  if (req.body.subdomain && !isValidSubdomain(req.body.subdomain)) {
+    errors.push('Invalid subdomain format');
   }
 
-  if (req.body.email && !isValidEmail(req.body.email)) {
-    errors.push('Invalid email format');
-  }
-
-  if (req.body.status && !['active', 'inactive', 'pending'].includes(req.body.status)) {
-    errors.push('Invalid status value');
+  if (req.body.active !== undefined && typeof req.body.active !== 'boolean') {
+    errors.push('Active status must be a boolean value');
   }
 
   if (errors.length > 0) {
@@ -83,6 +87,11 @@ const isValidEmail = (email: string): boolean => {
 const isValidDomain = (domain: string): boolean => {
   const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   return domainRegex.test(domain);
+};
+
+const isValidSubdomain = (subdomain: string): boolean => {
+  const subdomainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$/;
+  return subdomainRegex.test(subdomain);
 };
 
 const isValidPassword = (password: string): boolean => {

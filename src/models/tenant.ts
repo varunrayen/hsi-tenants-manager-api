@@ -2,21 +2,62 @@ import mongoose, { Schema } from 'mongoose';
 import { ITenant, ICustomer, IWarehouse, IUser, IRole } from '../types';
 
 const TenantSchema: Schema = new Schema({
-  tenantId: { type: String, required: true, unique: true },
   name: { type: String, required: true },
-  domain: { type: String, required: true, unique: true },
-  status: { type: String, enum: ['active', 'inactive', 'pending'], default: 'pending' },
-  customerId: { type: Schema.Types.ObjectId, required: true },
-  warehouseId: { type: Schema.Types.ObjectId, required: true },
-  superAdminId: { type: Schema.Types.ObjectId, required: true },
+  subdomain: { type: String, required: true, unique: true },
+  active: { type: Boolean, default: true },
+  apiGateway: { type: String, required: true },
+  cubeService: { type: String, required: true },
+  socketService: { type: String, required: true },
+  enabledSimulations: { type: Boolean, default: false },
+  features: {
+    combinedPackAndPrep: { type: Boolean, default: false },
+    combinedReceiveAndPrep: { type: Boolean, default: true },
+    dropship: { type: Boolean, default: true },
+    maximumPalletClearanceStrategy: { type: Boolean, default: true },
+    multiplePickingStrategies: { type: Boolean, default: true },
+    optimizedBatching: { type: Boolean, default: false },
+    rateShopping: { type: Boolean, default: true }
+  },
+  modules: [{
+    enabled: { type: Boolean, default: true },
+    name: { type: String, required: true }
+  }],
+  profile: {
+    businessAddress: { type: String, required: true },
+    businessName: { type: String, required: true }
+  },
   settings: {
-    timezone: { type: String, default: 'UTC' },
-    currency: { type: String, default: 'USD' },
-    language: { type: String, default: 'en' },
-    features: { type: [String], default: [] }
-  }
+    activities: {
+      packing: {
+        boxSelection: { type: Boolean, default: true }
+      },
+      receiving: {
+        putawayBinLocation: { type: Boolean, default: false },
+        poEnabled: { type: Boolean, default: false }
+      }
+    },
+    allowConstituentsPickingForBundleOrders: { type: Boolean, default: true },
+    backOrderEnabled: { type: Boolean, default: true },
+    blockParentLocations: { type: Boolean, default: true },
+    enableLocationValidation: { type: Boolean, default: true },
+    isSTOEnabled: { type: Boolean, default: true },
+    metricsConfig: {
+      preferredDimensionUnit: { type: [String], default: ['inches'] },
+      preferredWeightUnit: { type: [String], default: ['pounds'] }
+    },
+    multiAccountIntegrationSupportEnabled: { type: Boolean, default: true },
+    isOutboundPlanningEnabled: { type: Boolean, default: true }
+  },
+  integrations: { type: [String], default: [] },
+  typeOfCustomer: { 
+    type: [String], 
+    enum: ['3PL', 'Brand'], 
+    default: ['3PL'] 
+  },
+  createdAt: { type: Number, default: Date.now },
+  updatedAt: { type: Number, default: Date.now }
 }, {
-  timestamps: true
+  timestamps: false
 });
 
 const CustomerSchema: Schema = new Schema({

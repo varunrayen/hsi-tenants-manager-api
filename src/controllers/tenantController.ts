@@ -3,7 +3,7 @@ import { Types } from 'mongoose';
 import DatabaseConnection from '../config/database';
 import { CreateTenantRequest } from '../types';
 import { Tenant, Customer, Warehouse, User, Role } from '../models';
-import { generateTenantId, hashPassword } from '../utils/helpers';
+import { hashPassword } from '../utils/helpers';
 
 export class TenantController {
   constructor() {
@@ -16,9 +16,10 @@ export class TenantController {
     
     try {
       await session.withTransaction(async () => {
-        const { tenant, customer, warehouse, superAdmin, settings }: CreateTenantRequest = req.body;
+        const { tenant, customer, warehouse, superAdmin }: CreateTenantRequest = req.body;
         
-        const tenantId = generateTenantId();
+        // Use tenant subdomain as the identifier for related entities
+        const tenantId = tenant.subdomain;
 
         const customerDoc = new Customer({
           tenantId,
@@ -53,26 +54,38 @@ export class TenantController {
           permissions: ['*']
         });
 
-        const customerResult = await customerDoc.save({ session });
-        const warehouseResult = await warehouseDoc.save({ session });
-        const userResult = await userDoc.save({ session });
+        await customerDoc.save({ session });
+        await warehouseDoc.save({ session });
+        await userDoc.save({ session });
 
         await this.createDefaultRoles(tenantId, session);
 
+        const defaultModules = [
+          { enabled: true, name: 'Receiving' },
+          { enabled: true, name: 'Putaway' },
+          { enabled: true, name: 'Bundling' },
+          { enabled: true, name: 'Picking' },
+          { enabled: true, name: 'Prepping' },
+          { enabled: true, name: 'Packing' },
+          { enabled: true, name: 'Stock Cycle Count' },
+          { enabled: true, name: 'Stock Transfer' },
+          { enabled: true, name: 'Sorting - Outbound' }
+        ];
+
         const tenantDoc = new Tenant({
-          tenantId,
           name: tenant.name,
-          domain: tenant.domain,
-          status: 'active',
-          customerId: customerResult._id,
-          warehouseId: warehouseResult._id,
-          superAdminId: userResult._id,
-          settings: {
-            timezone: settings?.timezone || 'UTC',
-            currency: settings?.currency || 'USD',
-            language: settings?.language || 'en',
-            features: settings?.features || []
-          }
+          subdomain: tenant.subdomain,
+          active: true,
+          apiGateway: tenant.apiGateway,
+          cubeService: tenant.cubeService,
+          socketService: tenant.socketService,
+          enabledSimulations: tenant.enabledSimulations || false,
+          features: tenant.features || {},
+          modules: tenant.modules || defaultModules,
+          profile: tenant.profile,
+          settings: tenant.settings || {},
+          integrations: tenant.integrations || [],
+          typeOfCustomer: tenant.typeOfCustomer || ['3PL']
         });
 
         const tenantResult = await tenantDoc.save({ session });
@@ -156,9 +169,13 @@ export class TenantController {
         return;
       }
 
-      const customer = await Customer.findById(tenant.customerId);
-      const warehouse = await Warehouse.findById(tenant.warehouseId);
-      const superAdmin = await User.findById(tenant.superAdminId);
+      // Find related entities using tenant subdomain as identifier
+      const customer = await Customer.findOne({ tenantId: tenant.subdomain });
+      const warehouse = await Warehouse.findOne({ tenantId: tenant.subdomain });
+      const superAdmin = await User.findOne({ 
+        tenantId: tenant.subdomain, 
+        role: 'super_admin' 
+      });
 
       res.json({
         success: true,
@@ -166,7 +183,7 @@ export class TenantController {
           tenant,
           customer,
           warehouse,
-          superAdmin: superAdmin ? { ...superAdmin, password: undefined } : null
+          superAdmin: superAdmin ? { ...superAdmin.toObject(), password: undefined } : null
         }
       });
     } catch (error) {
@@ -244,10 +261,11 @@ export class TenantController {
           return;
         }
 
-        await Customer.findByIdAndDelete(tenant.customerId, { session });
-        await Warehouse.findByIdAndDelete(tenant.warehouseId, { session });
-        await User.deleteMany({ tenantId: tenant.tenantId }, { session });
-        await Role.deleteMany({ tenantId: tenant.tenantId }, { session });
+        // Delete related entities using tenant subdomain as identifier
+        await Customer.deleteOne({ tenantId: tenant.subdomain }, { session });
+        await Warehouse.deleteOne({ tenantId: tenant.subdomain }, { session });
+        await User.deleteMany({ tenantId: tenant.subdomain }, { session });
+        await Role.deleteMany({ tenantId: tenant.subdomain }, { session });
         await Tenant.findByIdAndDelete(id, { session });
 
         res.json({
