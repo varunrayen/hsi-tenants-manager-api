@@ -2,7 +2,20 @@ import { Request, Response, NextFunction } from 'express';
 import { CreateTenantRequest } from '../types';
 
 export const validateCreateTenant = (req: Request, res: Response, next: NextFunction): void => {
-  const { tenant, customer, warehouse, superAdmin }: CreateTenantRequest = req.body;
+  // Check if the request body contains nested structure or direct tenant data
+  const isNestedStructure = req.body.tenant !== undefined;
+  
+  let tenant, customer, warehouse, superAdmin;
+  
+  if (isNestedStructure) {
+    ({ tenant, customer, warehouse, superAdmin } = req.body as CreateTenantRequest);
+  } else {
+    // If sending tenant data directly, treat the entire body as tenant data
+    tenant = req.body;
+    customer = undefined;
+    warehouse = undefined;
+    superAdmin = undefined;
+  }
 
   const errors: string[] = [];
 
@@ -18,16 +31,19 @@ export const validateCreateTenant = (req: Request, res: Response, next: NextFunc
     errors.push('Tenant business profile information is required');
   }
 
-  if (!customer || !customer.companyName || !customer.contactPerson || !customer.email) {
-    errors.push('Customer company name, contact person, and email are required');
-  }
+  // Only validate customer, warehouse, and superAdmin if they are provided in nested structure
+  if (isNestedStructure) {
+    if (!customer || !customer.companyName || !customer.contactPerson || !customer.email) {
+      errors.push('Customer company name, contact person, and email are required');
+    }
 
-  if (!warehouse || !warehouse.name || !warehouse.code) {
-    errors.push('Warehouse name and code are required');
-  }
+    if (!warehouse || !warehouse.name || !warehouse.code) {
+      errors.push('Warehouse name and code are required');
+    }
 
-  if (!superAdmin || !superAdmin.username || !superAdmin.email || !superAdmin.password) {
-    errors.push('Super admin username, email, and password are required');
+    if (!superAdmin || !superAdmin.username || !superAdmin.email || !superAdmin.password) {
+      errors.push('Super admin username, email, and password are required');
+    }
   }
 
   if (tenant?.subdomain && !isValidSubdomain(tenant.subdomain)) {

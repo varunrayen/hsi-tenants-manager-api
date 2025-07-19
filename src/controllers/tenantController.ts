@@ -1,114 +1,53 @@
 import { Request, Response } from 'express';
-import { Types } from 'mongoose';
-import DatabaseConnection from '../config/database';
-import { CreateTenantRequest } from '../types';
-import { Tenant, Customer, Warehouse, User, Role } from '../models';
-import { hashPassword } from '../utils/helpers';
+import {
+  CreateTenantUseCase,
+  CreateTenantDirectUseCase,
+  GetTenantUseCase,
+  UpdateTenantUseCase,
+  DeleteTenantUseCase,
+  ListTenantsUseCase
+} from '../use-cases';
 
 export class TenantController {
+  private createTenantUseCase: CreateTenantUseCase;
+  private createTenantDirectUseCase: CreateTenantDirectUseCase;
+  private getTenantUseCase: GetTenantUseCase;
+  private updateTenantUseCase: UpdateTenantUseCase;
+  private deleteTenantUseCase: DeleteTenantUseCase;
+  private listTenantsUseCase: ListTenantsUseCase;
+
   constructor() {
-    // Database connection is handled in app.ts
+    this.createTenantUseCase = new CreateTenantUseCase();
+    this.createTenantDirectUseCase = new CreateTenantDirectUseCase();
+    this.getTenantUseCase = new GetTenantUseCase();
+    this.updateTenantUseCase = new UpdateTenantUseCase();
+    this.deleteTenantUseCase = new DeleteTenantUseCase();
+    this.listTenantsUseCase = new ListTenantsUseCase();
   }
 
   public createTenant = async (req: Request, res: Response): Promise<void> => {
-    const mongoose = DatabaseConnection.getInstance().getConnection();
-    const session = await mongoose.startSession();
-    
     try {
-      await session.withTransaction(async () => {
-        const { tenant, customer, warehouse, superAdmin }: CreateTenantRequest = req.body;
-        
-        // Use tenant subdomain as the identifier for related entities
-        const tenantId = tenant.subdomain;
+      // Check if the request body contains nested structure or direct tenant data
+      const isNestedStructure = req.body.tenant !== undefined;
+      
+      let result;
+      if (isNestedStructure) {
+        result = await this.createTenantUseCase.execute(req.body);
+      } else {
+        result = await this.createTenantDirectUseCase.execute(req.body);
+      }
 
-        const customerDoc = new Customer({
-          tenantId,
-          companyName: customer.companyName,
-          contactPerson: customer.contactPerson,
-          email: customer.email,
-          phone: customer.phone,
-          address: customer.address,
-          billingInfo: customer.billingInfo
-        });
-
-        const warehouseDoc = new Warehouse({
-          tenantId,
-          name: warehouse.name,
-          code: warehouse.code,
-          address: warehouse.address,
-          manager: warehouse.manager,
-          capacity: warehouse.capacity,
-          isActive: true
-        });
-
-        const hashedPassword = await hashPassword(superAdmin.password);
-        const userDoc = new User({
-          tenantId,
-          username: superAdmin.username,
-          email: superAdmin.email,
-          password: hashedPassword,
-          firstName: superAdmin.firstName,
-          lastName: superAdmin.lastName,
-          role: 'super_admin',
-          isActive: true,
-          permissions: ['*']
-        });
-
-        await customerDoc.save({ session });
-        await warehouseDoc.save({ session });
-        await userDoc.save({ session });
-
-        await this.createDefaultRoles(tenantId, session);
-
-        const defaultModules = [
-          { enabled: true, name: 'Receiving' },
-          { enabled: true, name: 'Putaway' },
-          { enabled: true, name: 'Bundling' },
-          { enabled: true, name: 'Picking' },
-          { enabled: true, name: 'Prepping' },
-          { enabled: true, name: 'Packing' },
-          { enabled: true, name: 'Stock Cycle Count' },
-          { enabled: true, name: 'Stock Transfer' },
-          { enabled: true, name: 'Sorting - Outbound' }
-        ];
-
-        const tenantDoc = new Tenant({
-          name: tenant.name,
-          subdomain: tenant.subdomain,
-          active: true,
-          apiGateway: tenant.apiGateway,
-          cubeService: tenant.cubeService,
-          socketService: tenant.socketService,
-          enabledSimulations: tenant.enabledSimulations || false,
-          features: tenant.features || {},
-          modules: tenant.modules || defaultModules,
-          profile: tenant.profile,
-          settings: tenant.settings || {},
-          integrations: tenant.integrations || [],
-          typeOfCustomer: tenant.typeOfCustomer || ['3PL']
-        });
-
-        const tenantResult = await tenantDoc.save({ session });
-
-        res.status(201).json({
-          success: true,
-          data: {
-            tenantId: tenantResult._id,
-            tenant: tenantDoc,
-            customer: customerDoc,
-            warehouse: warehouseDoc,
-            superAdmin: { ...userDoc.toObject(), password: undefined }
-          }
-        });
-      });
+      if (result.success) {
+        res.status(201).json(result);
+      } else {
+        res.status(500).json(result);
+      }
     } catch (error) {
-      console.error('Error creating tenant:', error);
+      console.error('Error in createTenant controller:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to create tenant'
+        error: 'Internal server error'
       });
-    } finally {
-      await session.endSession();
     }
   };
 
@@ -116,33 +55,25 @@ export class TenantController {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
-      const skip = (page - 1) * limit;
 
-      const tenants = await Tenant
-        .find({})
-        .skip(skip)
-        .limit(limit)
-        .exec();
+      const result = await this.listTenantsUseCase.execute({ page, limit });
 
-      const total = await Tenant.countDocuments();
-
-      res.json({
-        success: true,
-        data: {
-          tenants,
-          pagination: {
-            page,
-            limit,
-            total,
-            totalPages: Math.ceil(total / limit)
+      if (result.success) {
+        res.json({
+          success: true,
+          data: {
+            tenants: result.data?.items,
+            pagination: result.data?.pagination
           }
-        }
-      });
+        });
+      } else {
+        res.status(500).json(result);
+      }
     } catch (error) {
-      console.error('Error fetching tenants:', error);
+      console.error('Error in getAllTenants controller:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to fetch tenants'
+        error: 'Internal server error'
       });
     }
   };
@@ -151,46 +82,28 @@ export class TenantController {
     try {
       const { id } = req.params;
       
-      if (!id || !Types.ObjectId.isValid(id)) {
+      if (!id) {
         res.status(400).json({
           success: false,
-          error: 'Invalid tenant ID'
+          error: 'Tenant ID is required'
         });
         return;
       }
 
-      const tenant = await Tenant.findById(id);
-      
-      if (!tenant) {
-        res.status(404).json({
-          success: false,
-          error: 'Tenant not found'
-        });
-        return;
+      const result = await this.getTenantUseCase.execute({ id });
+
+      if (result.success) {
+        res.json(result);
+      } else {
+        const statusCode = result.error === 'Invalid tenant ID' ? 400 : 
+                         result.error === 'Tenant not found' ? 404 : 500;
+        res.status(statusCode).json(result);
       }
-
-      // Find related entities using tenant subdomain as identifier
-      const customer = await Customer.findOne({ tenantId: tenant.subdomain });
-      const warehouse = await Warehouse.findOne({ tenantId: tenant.subdomain });
-      const superAdmin = await User.findOne({ 
-        tenantId: tenant.subdomain, 
-        role: 'super_admin' 
-      });
-
-      res.json({
-        success: true,
-        data: {
-          tenant,
-          customer,
-          warehouse,
-          superAdmin: superAdmin ? { ...superAdmin.toObject(), password: undefined } : null
-        }
-      });
     } catch (error) {
-      console.error('Error fetching tenant:', error);
+      console.error('Error in getTenantById controller:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to fetch tenant'
+        error: 'Internal server error'
       });
     }
   };
@@ -199,109 +112,62 @@ export class TenantController {
     try {
       const { id } = req.params;
       
-      if (!id || !Types.ObjectId.isValid(id)) {
+      if (!id) {
         res.status(400).json({
           success: false,
-          error: 'Invalid tenant ID'
+          error: 'Tenant ID is required'
         });
         return;
       }
 
-      const updateData = {
-        ...req.body,
-        updatedAt: new Date()
-      };
-
-      const result = await Tenant.findByIdAndUpdate(id, updateData, { new: true });
-
-      if (!result) {
-        res.status(404).json({
-          success: false,
-          error: 'Tenant not found'
-        });
-        return;
-      }
-
-      res.json({
-        success: true,
-        message: 'Tenant updated successfully'
+      const result = await this.updateTenantUseCase.execute({
+        id,
+        updateData: req.body
       });
+
+      if (result.success) {
+        res.json(result);
+      } else {
+        const statusCode = result.error === 'Invalid tenant ID' ? 400 : 
+                         result.error === 'Tenant not found' ? 404 : 500;
+        res.status(statusCode).json(result);
+      }
     } catch (error) {
-      console.error('Error updating tenant:', error);
+      console.error('Error in updateTenant controller:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to update tenant'
+        error: 'Internal server error'
       });
     }
   };
 
   public deleteTenant = async (req: Request, res: Response): Promise<void> => {
-    const mongoose = DatabaseConnection.getInstance().getConnection();
-    const session = await mongoose.startSession();
-    
     try {
-      await session.withTransaction(async () => {
-        const { id } = req.params;
-        
-        if (!id || !Types.ObjectId.isValid(id)) {
-          res.status(400).json({
-            success: false,
-            error: 'Invalid tenant ID'
-          });
-          return;
-        }
-
-        const tenant = await Tenant.findById(id);
-        
-        if (!tenant) {
-          res.status(404).json({
-            success: false,
-            error: 'Tenant not found'
-          });
-          return;
-        }
-
-        // Delete related entities using tenant subdomain as identifier
-        await Customer.deleteOne({ tenantId: tenant.subdomain }, { session });
-        await Warehouse.deleteOne({ tenantId: tenant.subdomain }, { session });
-        await User.deleteMany({ tenantId: tenant.subdomain }, { session });
-        await Role.deleteMany({ tenantId: tenant.subdomain }, { session });
-        await Tenant.findByIdAndDelete(id, { session });
-
-        res.json({
-          success: true,
-          message: 'Tenant deleted successfully'
+      const { id } = req.params;
+      
+      if (!id) {
+        res.status(400).json({
+          success: false,
+          error: 'Tenant ID is required'
         });
-      });
+        return;
+      }
+
+      const result = await this.deleteTenantUseCase.execute({ id });
+
+      if (result.success) {
+        res.json(result);
+      } else {
+        const statusCode = result.error === 'Invalid tenant ID' ? 400 : 
+                         result.error === 'Tenant not found' ? 404 : 500;
+        res.status(statusCode).json(result);
+      }
     } catch (error) {
-      console.error('Error deleting tenant:', error);
+      console.error('Error in deleteTenant controller:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to delete tenant'
+        error: 'Internal server error'
       });
-    } finally {
-      await session.endSession();
     }
   };
-
-  private async createDefaultRoles(tenantId: string, session: any): Promise<void> {
-    const defaultRoles = [
-      new Role({
-        tenantId,
-        name: 'Admin',
-        description: 'Administrator role with full access',
-        permissions: ['manage_users', 'manage_inventory', 'view_reports', 'manage_settings'],
-        isSystemRole: true
-      }),
-      new Role({
-        tenantId,
-        name: 'Associate',
-        description: 'Basic user role with limited access',
-        permissions: ['view_inventory', 'update_inventory'],
-        isSystemRole: true
-      })
-    ];
-
-    await Role.insertMany(defaultRoles, { session });
-  }
 }
