@@ -19,6 +19,7 @@ const TenantSchema: Schema = new Schema({
     rateShopping: { type: Boolean, default: true }
   },
   modules: [{
+    _id: false,
     enabled: { type: Boolean, default: true },
     name: { type: String, required: true }
   }],
