@@ -1,55 +1,10 @@
-import { Model } from 'mongoose';
 import { IRole } from '../types';
 import { Role } from '../models';
-import { IBaseService } from './BaseService';
+import { BaseService } from './BaseService';
 
-export class RoleService implements IBaseService<IRole> {
-  private model: Model<IRole>;
-
+export class RoleService extends BaseService<IRole> {
   constructor() {
-    this.model = Role;
-  }
-
-  async create(data: Partial<IRole>, session?: any): Promise<IRole> {
-    const role = new this.model(data);
-    return await role.save({ session });
-  }
-
-  async findById(id: string): Promise<IRole | null> {
-    return await this.model.findById(id).exec();
-  }
-
-  async findOne(filter: any): Promise<IRole | null> {
-    return await this.model.findOne(filter).exec();
-  }
-
-  async find(filter: any = {}, options: any = {}): Promise<IRole[]> {
-    const { skip, limit, sort } = options;
-    let query = this.model.find(filter);
-    
-    if (skip !== undefined) query = query.skip(skip);
-    if (limit !== undefined) query = query.limit(limit);
-    if (sort) query = query.sort(sort);
-    
-    return await query.exec();
-  }
-
-  async updateById(id: string, data: Partial<IRole>): Promise<IRole | null> {
-    return await this.model.findByIdAndUpdate(id, data, { new: true }).exec();
-  }
-
-  async deleteById(id: string, session?: any): Promise<boolean> {
-    const result = await this.model.findByIdAndDelete(id, { session }).exec();
-    return !!result;
-  }
-
-  async deleteMany(filter: any, session?: any): Promise<boolean> {
-    const result = await this.model.deleteMany(filter, { session }).exec();
-    return result.deletedCount > 0;
-  }
-
-  async count(filter: any = {}): Promise<number> {
-    return await this.model.countDocuments(filter).exec();
+    super(Role);
   }
 
   async createDefaultRoles(tenantId: string, session?: any): Promise<IRole[]> {
