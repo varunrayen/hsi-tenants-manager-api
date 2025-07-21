@@ -1,0 +1,352 @@
+{
+    "_id": ObjectId("6819bbd09e81e425875df88d"),
+    "tenant": "6819b4ba4f0ecfd72578641e",
+    "name": "ASSOCIATE",
+    "entityParent": "USER_ROLE",
+    "attributes": {
+        "permissionOptions": [
+            {
+                "name": "Dashboard",
+                "href": "/dashboard",
+                "selectedImage": "warehouse_selected.png",
+                "unselectedImage": "warehouse_unselected.png",
+                "type": "INTRINSIC",
+                "children": [
+                    {
+                        "name": "Orders",
+                        "href": "/dashboard/orders",
+                        "selectedImage": "orders_selected.png",
+                        "unselectedImage": "orders_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Inventory",
+                        "href": "/dashboard/inventory",
+                        "selectedImage": "orders_selected.png",
+                        "unselectedImage": "orders_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Space Management",
+                        "href": "/dashboard/spaceManagement",
+                        "selectedImage": "orders_selected.png",
+                        "unselectedImage": "orders_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    }
+                ]
+            },
+            {
+                "name": "Notifications",
+                "href": "/notifications",
+                "selectedImage": "integrations_selected.png",
+                "unselectedImage": "integrations_unselected.png",
+                "readable": true,
+                "writable": true
+            },
+            {
+                "name": "Outbound Logistics",
+                "selectedImage": "warehouse_selected.png",
+                "unselectedImage": "warehouse_unselected.png",
+                "children": [
+                    {
+                        "name": "Order management",
+                        "href": "/orders",
+                        "selectedImage": "orders_selected.png",
+                        "unselectedImage": "orders_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Exceptions",
+                        "href": "/outboundExceptions",
+                        "selectedImage": "orders_selected.png",
+                        "unselectedImage": "orders_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Operations",
+                        "href": "/outbound",
+                        "selectedImage": "orders_selected.png",
+                        "unselectedImage": "orders_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "FBA Inbound",
+                        "href": "/fbaInbound",
+                        "selectedImage": "orders_selected.png",
+                        "unselectedImage": "orders_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    }
+                ]
+            },
+            {
+                "name": "Inbound Logistics",
+                "selectedImage": "warehouse_selected.png",
+                "unselectedImage": "warehouse_unselected.png",
+                "children": [
+                    {
+                        "name": "Consignments",
+                        "href": "/consignments",
+                        "selectedImage": "orders_selected.png",
+                        "unselectedImage": "orders_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Operations",
+                        "href": "/inbound",
+                        "selectedImage": "orders_selected.png",
+                        "unselectedImage": "orders_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Purchase Orders",
+                        "href": "/purchaseOrders",
+                        "selectedImage": "orders_selected.png",
+                        "unselectedImage": "orders_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    }
+                ]
+            },
+            {
+                "name": "Inventory",
+                "selectedImage": "integrations_selected.png",
+                "unselectedImage": "integrations_unselected.png",
+                "children": [
+                    {
+                        "name": "Stock Ledger",
+                        "href": "/inventoryLedger",
+                        "selectedImage": "integrations_selected.png",
+                        "unselectedImage": "integrations_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Cycle Count",
+                        "href": "/cycle-count-plans",
+                        "selectedImage": "users_selected.png",
+                        "unselectedImage": "users_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Bin to Bin Transfer",
+                        "href": "/binToBinTransfer",
+                        "selectedImage": "users_selected.png",
+                        "unselectedImage": "users_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Operations",
+                        "href": "/inventoryOperations",
+                        "selectedImage": "users_selected.png",
+                        "unselectedImage": "users_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    }
+                ]
+            },
+            {
+                "name": "Billing",
+                "selectedImage": "integrations_selected.png",
+                "unselectedImage": "integrations_unselected.png",
+                "children": [
+                    {
+                        "name": "Usage",
+                        "href": "/usage",
+                        "selectedImage": "integrations_selected.png",
+                        "unselectedImage": "integrations_unselected.png",
+                        "isBeta": true,
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Invoicing",
+                        "href": "/invoicing",
+                        "selectedImage": "integrations_selected.png",
+                        "unselectedImage": "integrations_unselected.png",
+                        "isBeta": true,
+                        "readable": true,
+                        "writable": true
+                    }
+                ]
+            },
+            {
+                "name": "Setup",
+                "selectedImage": "stations_selected.png",
+                "unselectedImage": "stations_unselected.png",
+                "children": [
+                    {
+                        "name": "Warehouse Management",
+                        "href": "/warehouses",
+                        "selectedImage": "users_selected.png",
+                        "unselectedImage": "users_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Packing Materials",
+                        "href": "/materials",
+                        "selectedImage": "users_selected.png",
+                        "unselectedImage": "users_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Billing Profiles",
+                        "href": "/billing-profiles",
+                        "selectedImage": "integrations_selected.png",
+                        "unselectedImage": "integrations_unselected.png",
+                        "isBeta": true,
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Client Management",
+                        "href": "/customers",
+                        "selectedImage": "users_selected.png",
+                        "unselectedImage": "users_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "User Management",
+                        "href": "/users",
+                        "selectedImage": "users_selected.png",
+                        "unselectedImage": "users_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Report Management",
+                        "href": "/reports",
+                        "selectedImage": "integrations_selected.png",
+                        "unselectedImage": "integrations_unselected.png",
+                        "isBeta": true,
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Integration Management",
+                        "href": "/integrations",
+                        "selectedImage": "integrations_selected.png",
+                        "unselectedImage": "integrations_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Workflow Management",
+                        "href": "/workflows",
+                        "selectedImage": "workflow_selected.png",
+                        "unselectedImage": "workflow_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Vendor Management",
+                        "href": "/vendors",
+                        "selectedImage": "users_selected.png",
+                        "unselectedImage": "users_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Station Management",
+                        "href": "/stations",
+                        "selectedImage": "stations_selected.png",
+                        "unselectedImage": "stations_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Tote Management",
+                        "href": "/totes",
+                        "selectedImage": "devices_selected.png",
+                        "unselectedImage": "devices_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Box/Pallet Management",
+                        "href": "/boxTypes",
+                        "selectedImage": "devices_selected.png",
+                        "unselectedImage": "devices_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Location Management",
+                        "href": "/locations",
+                        "selectedImage": "devices_selected.png",
+                        "unselectedImage": "devices_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "UoM Management",
+                        "href": "/uom",
+                        "selectedImage": "devices_selected.png",
+                        "unselectedImage": "devices_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Product Management",
+                        "href": "/products",
+                        "selectedImage": "integrations_selected.png",
+                        "unselectedImage": "integrations_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "SKU-Bin Management",
+                        "href": "/skuBinMappings",
+                        "selectedImage": "rules_selected.png",
+                        "unselectedImage": "rules_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Rule Engine",
+                        "href": "/rules",
+                        "selectedImage": "rules_selected.png",
+                        "unselectedImage": "rules_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Storage Management",
+                        "href": "/storage-management",
+                        "selectedImage": "rules_selected.png",
+                        "unselectedImage": "rules_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    },
+                    {
+                        "name": "Notification Management",
+                        "href": "/notifications",
+                        "selectedImage": "integrations_selected.png",
+                        "unselectedImage": "integrations_unselected.png",
+                        "readable": true,
+                        "writable": true
+                    }
+                ]
+            }
+        ]
+    },
+    "createdAt": 1742837848772.0,
+    "updatedAt": 1742837848772.0,
+    "customers": null,
+    "warehouses": null,
+    "subEntityParents": null,
+    "code": null
+}

@@ -122,6 +122,29 @@
             "description": "Delete a tenant and all associated data (customer, warehouse, users, roles)"
           },
           "response": []
+        },
+        {
+          "name": "Setup Default Warehouse",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tenants/{{tenant_id}}/setup/warehouse",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tenants", "{{tenant_id}}", "setup", "warehouse"]
+            },
+            "description": "Create a default warehouse for a tenant with predefined settings"
+          },
+          "response": []
         }
       ],
       "description": "Endpoints for managing tenants"

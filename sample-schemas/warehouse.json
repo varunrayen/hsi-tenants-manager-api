@@ -1,0 +1,27 @@
+{
+    "_id": ObjectId("6819b4ba4f0ecfd725786420"),
+    "name": "Kevidko Warehouse",
+    "code": "DEF",
+    "isDefault": true,
+    "active": true,
+    "tenant": "6819b4ba4f0ecfd72578641e",
+    "createdAt": 1746515130559.0,
+    "location": "Default",
+    "splitOrdersEnabled": null,
+    "typeOfWarehouse": [
+        "D2C",
+        "B2B"
+    ],
+    "updatedAt": 1748049510114.0,
+    "address": {
+        "email": "order.desk@kevidko.com",
+        "phone": "4245384356",
+        "zip": "90023",
+        "city": "LOS ANGELES",
+        "country": "US",
+        "line1": "3161-3171 E. 12TH ST"
+    },
+    "storageTypes": [
+        "Ambient"
+    ]
+}

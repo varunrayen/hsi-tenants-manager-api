@@ -82,20 +82,26 @@ const CustomerSchema: Schema = new Schema({
   timestamps: true
 });
 
+const addressSchema = new Schema({
+  email: { type: String, required: true },
+  phone: { type: String, required: true },
+  zip: { type: String, required: true },
+  city: { type: String, required: true },
+  country: { type: String, required: true },
+  line1: { type: String, required: true }
+}, { _id: false });
+
 const WarehouseSchema: Schema = new Schema({
-  tenantId: { type: String, required: true },
   name: { type: String, required: true },
-  code: { type: String, required: true, unique: true },
-  address: {
-    street: { type: String, required: true },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    zipCode: { type: String, required: true },
-    country: { type: String, required: true }
-  },
-  manager: { type: String, required: true },
-  capacity: { type: Number, required: true },
-  isActive: { type: Boolean, default: true }
+  code: { type: String, required: true },
+  isDefault: { type: Boolean, default: false },
+  active: { type: Boolean, default: true },
+  tenant: { type: String, required: true },
+  location: { type: String, required: true },
+  splitOrdersEnabled: { type: Boolean, default: null },
+  typeOfWarehouse: [{ type: String, required: true }],
+  address: { type: addressSchema, required: true },
+  storageTypes: [{ type: String, required: true }]
 }, {
   timestamps: true
 });

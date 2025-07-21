@@ -5,7 +5,8 @@ import {
   GetTenantUseCase,
   UpdateTenantUseCase,
   DeleteTenantUseCase,
-  ListTenantsUseCase
+  ListTenantsUseCase,
+  SetupDefaultWarehouseUseCase
 } from '../use-cases';
 
 export class TenantController {
@@ -15,6 +16,7 @@ export class TenantController {
   private updateTenantUseCase: UpdateTenantUseCase;
   private deleteTenantUseCase: DeleteTenantUseCase;
   private listTenantsUseCase: ListTenantsUseCase;
+  private setupDefaultWarehouseUseCase: SetupDefaultWarehouseUseCase;
 
   constructor() {
     this.createTenantUseCase = new CreateTenantUseCase();
@@ -23,6 +25,7 @@ export class TenantController {
     this.updateTenantUseCase = new UpdateTenantUseCase();
     this.deleteTenantUseCase = new DeleteTenantUseCase();
     this.listTenantsUseCase = new ListTenantsUseCase();
+    this.setupDefaultWarehouseUseCase = new SetupDefaultWarehouseUseCase();
   }
 
   public createTenant = async (req: Request, res: Response): Promise<void> => {
@@ -164,6 +167,34 @@ export class TenantController {
       }
     } catch (error) {
       console.error('Error in deleteTenant controller:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error'
+      });
+    }
+  };
+
+  public setupDefaultWarehouse = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { tenantId } = req.params;
+      
+      if (!tenantId) {
+        res.status(400).json({
+          success: false,
+          error: 'Tenant ID is required'
+        });
+        return;
+      }
+
+      const result = await this.setupDefaultWarehouseUseCase.execute({ tenantId });
+
+      if (result.success) {
+        res.status(201).json(result);
+      } else {
+        res.status(500).json(result);
+      }
+    } catch (error) {
+      console.error('Error in setupDefaultWarehouse controller:', error);
       res.status(500).json({
         success: false,
         error: 'Internal server error'

@@ -1,0 +1,98 @@
+{
+    "_id": ObjectId("63e2379ad48215ca6102efe2"),
+    "active": true,
+    "apiGateway": "https://api.stg.us-west-1.hopstack-labs.com",
+    "createdAt": NumberLong(1675769796334),
+    "cubeService": "https://api.stg.us-west-1.hopstack-labs.com/analytics",
+    "enabledSimulations": false,
+    "features": {
+        "combinedPackAndPrep": false,
+        "combinedReceiveAndPrep": true,
+        "dropship": true,
+        "maximumPalletClearanceStrategy": true,
+        "multiplePickingStrategies": true,
+        "optimizedBatching": false,
+        "rateShopping": true
+    },
+    "integrations": [],
+    "modules": [
+        {
+            "enabled": true,
+            "name": "Receiving"
+        },
+        {
+            "enabled": true,
+            "name": "Putaway"
+        },
+        {
+            "enabled": true,
+            "name": "Bundling"
+        },
+        {
+            "enabled": true,
+            "name": "Picking"
+        },
+        {
+            "enabled": true,
+            "name": "Prepping"
+        },
+        {
+            "enabled": true,
+            "name": "Packing"
+        },
+        {
+            "enabled": true,
+            "name": "Stock Cycle Count"
+        },
+        {
+            "enabled": true,
+            "name": "Stock Transfer"
+        },
+        {
+            "enabled": true,
+            "name": "Stock Transfer"
+        },
+        {
+            "enabled": true,
+            "name": "Sorting - Outbound"
+        }
+    ],
+    "name": "Hopstack",
+    "profile": {
+        "businessAddress": "123, Main Street, Northeast Harbor, Mount Desert, Hancock County, Maine, United States, 04662",
+        "businessName": "Demo Tenant"
+    },
+    "settings": {
+        "activities": {
+            "packing": {
+                "boxSelection": true
+            },
+            "receiving": {
+                "putawayBinLocation": false,
+                "poEnabled": false
+            }
+        },
+        "allowConstituentsPickingForBundleOrders": true,
+        "backOrderEnabled": true,
+        "blockParentLocations": true,
+        "enableLocationValidation": true,
+        "isSTOEnabled": true,
+        "metricsConfig": {
+            "preferredDimensionUnit": [
+                "inches"
+            ],
+            "preferredWeightUnit": [
+                "pounds"
+            ]
+        },
+        "multiAccountIntegrationSupportEnabled": true,
+        "isOutboundPlanningEnabled": true
+    },
+    "socketService": "https://api.stg.us-west-1.hopstack-labs.com/socket-service",
+    "subdomain": "demo",
+    "typeOfCustomer": [
+        "3PL",
+        "Brand"
+    ],
+    "updatedAt": NumberLong(1692356822727)
+}

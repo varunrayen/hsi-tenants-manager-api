@@ -1,0 +1,25 @@
+{
+    "_id": ObjectId("62c409289e4e9fea335912e0"),
+    "name": "Default",
+    "code": "DEF",
+    "tenant": "62c3be3d2b411d284d7ac25b",
+    "isDefault": true,
+    "createdAt": 1657014568753.0,
+    "updatedAt": 1674046802741.0,
+    "warehouses": [
+        "62c4092c52e33d04efb14e28"
+    ],
+    "currency": "$",
+    "currentBillingProfile": null,
+    "active": true,
+    "metaData": {
+        "ticket": "HOP-5833"
+    },
+    "settings": {
+        "workflows": {
+            "inbound": {
+                "enabled": true
+            }
+        }
+    }
+}

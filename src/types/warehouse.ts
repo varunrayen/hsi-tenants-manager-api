@@ -1,14 +1,25 @@
 import { Document } from 'mongoose';
-import { Address } from './common';
+
+export interface WarehouseAddress {
+  email: string;
+  phone: string;
+  zip: string;
+  city: string;
+  country: string;
+  line1: string;
+}
 
 export interface IWarehouse extends Document {
-  tenantId: string;
   name: string;
   code: string;
-  address: Address;
-  manager: string;
-  capacity: number;
-  isActive: boolean;
+  isDefault: boolean;
+  active: boolean;
+  tenant: string;
+  location: string;
+  splitOrdersEnabled: boolean | null;
+  typeOfWarehouse: string[];
+  address: WarehouseAddress;
+  storageTypes: string[];
   createdAt: Date;
   updatedAt: Date;
 }

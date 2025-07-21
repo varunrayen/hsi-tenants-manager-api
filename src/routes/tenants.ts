@@ -10,5 +10,6 @@ router.get('/', tenantController.getAllTenants);
 router.get('/:id', tenantController.getTenantById);
 router.put('/:id', validateUpdateTenant, tenantController.updateTenant);
 router.delete('/:id', tenantController.deleteTenant);
+router.post('/:tenantId/setup/warehouse', tenantController.setupDefaultWarehouse);
 
 export default router;

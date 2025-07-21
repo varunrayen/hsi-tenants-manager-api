@@ -60,13 +60,23 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
         // Create warehouse if provided
         if (warehouse) {
           warehouseDoc = await this.warehouseService.create({
-            tenantId,
             name: warehouse.name,
             code: warehouse.code,
-            address: warehouse.address,
-            manager: warehouse.manager,
-            capacity: warehouse.capacity,
-            isActive: true
+            isDefault: true,
+            active: true,
+            tenant: tenantId,
+            location: "Default",
+            splitOrdersEnabled: null,
+            typeOfWarehouse: ["D2C", "B2B"],
+            address: {
+              email: "warehouse@company.com",
+              phone: "1234567890",
+              zip: warehouse.address?.zipCode || "00000",
+              city: warehouse.address?.city || "Default City",
+              country: warehouse.address?.country || "US",
+              line1: warehouse.address?.street || "Default Address"
+            },
+            storageTypes: ["Ambient"]
           }, session);
         }
 
