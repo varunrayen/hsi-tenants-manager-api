@@ -61,22 +61,23 @@ const TenantSchema: Schema = new Schema({
 });
 
 const CustomerSchema: Schema = new Schema({
-  tenantId: { type: String, required: true },
-  companyName: { type: String, required: true },
-  contactPerson: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: { type: String, required: true },
-  address: {
-    street: { type: String, required: true },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    zipCode: { type: String, required: true },
-    country: { type: String, required: true }
+  name: { type: String, required: true },
+  code: { type: String, required: true },
+  tenant: { type: String, required: true },
+  isDefault: { type: Boolean, default: false },
+  warehouses: [{ type: String }],
+  currency: { type: String, required: true },
+  currentBillingProfile: { type: String, default: null },
+  active: { type: Boolean, default: true },
+  metaData: {
+    ticket: { type: String }
   },
-  billingInfo: {
-    planType: { type: String, required: true },
-    billingCycle: { type: String, enum: ['monthly', 'yearly'], required: true },
-    paymentMethod: { type: String, required: true }
+  settings: {
+    workflows: {
+      inbound: {
+        enabled: { type: Boolean, default: true }
+      }
+    }
   }
 }, {
   timestamps: true
@@ -107,15 +108,36 @@ const WarehouseSchema: Schema = new Schema({
 });
 
 const UserSchema: Schema = new Schema({
-  tenantId: { type: String, required: true },
+  name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  role: { type: String, enum: ['super_admin', 'admin', 'user'], required: true },
-  isActive: { type: Boolean, default: true },
-  permissions: { type: [String], default: [] }
+  role: { type: String, required: true },
+  hopstackModules: { type: Schema.Types.Mixed, default: null },
+  permissions: [{
+    route: { type: String, required: true },
+    readable: { type: Boolean, required: true },
+    writable: { type: Boolean, required: true }
+  }],
+  pagePreferences: [{
+    route: { type: String, required: true },
+    visible: { type: Boolean, required: true }
+  }],
+  tenant: { type: String, required: true },
+  isDefault: { type: Boolean, default: false },
+  email: { type: String, required: true, unique: true },
+  isEmailVerified: { type: Boolean, default: false },
+  termsAndConditionsAccepted: { type: Boolean, default: false },
+  activated: { type: Boolean, default: false },
+  meta: {
+    lastLogin: { type: Number },
+    lastLoginPlatform: { type: String },
+    lastLoginIp: { type: String },
+    lastLoginOs: { type: String, default: null },
+    lastLoginOsVersion: { type: String, default: null },
+    lastLoginModel: { type: String, default: null },
+    lastLoginAppVersionName: { type: String, default: null },
+    lastLoginAppVersionCode: { type: String, default: null }
+  }
 }, {
   timestamps: true
 });

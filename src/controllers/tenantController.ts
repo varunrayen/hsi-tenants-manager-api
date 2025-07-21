@@ -6,7 +6,9 @@ import {
   UpdateTenantUseCase,
   DeleteTenantUseCase,
   ListTenantsUseCase,
-  SetupDefaultWarehouseUseCase
+  SetupDefaultWarehouseUseCase,
+  SetupDefaultCustomerUseCase,
+  SetupDefaultSuperAdminUseCase
 } from '../use-cases';
 
 export class TenantController {
@@ -17,6 +19,8 @@ export class TenantController {
   private deleteTenantUseCase: DeleteTenantUseCase;
   private listTenantsUseCase: ListTenantsUseCase;
   private setupDefaultWarehouseUseCase: SetupDefaultWarehouseUseCase;
+  private setupDefaultCustomerUseCase: SetupDefaultCustomerUseCase;
+  private setupDefaultSuperAdminUseCase: SetupDefaultSuperAdminUseCase;
 
   constructor() {
     this.createTenantUseCase = new CreateTenantUseCase();
@@ -26,6 +30,8 @@ export class TenantController {
     this.deleteTenantUseCase = new DeleteTenantUseCase();
     this.listTenantsUseCase = new ListTenantsUseCase();
     this.setupDefaultWarehouseUseCase = new SetupDefaultWarehouseUseCase();
+    this.setupDefaultCustomerUseCase = new SetupDefaultCustomerUseCase();
+    this.setupDefaultSuperAdminUseCase = new SetupDefaultSuperAdminUseCase();
   }
 
   public createTenant = async (req: Request, res: Response): Promise<void> => {
@@ -195,6 +201,62 @@ export class TenantController {
       }
     } catch (error) {
       console.error('Error in setupDefaultWarehouse controller:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error'
+      });
+    }
+  };
+
+  public setupDefaultCustomer = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { tenantId } = req.params;
+      
+      if (!tenantId) {
+        res.status(400).json({
+          success: false,
+          error: 'Tenant ID is required'
+        });
+        return;
+      }
+
+      const result = await this.setupDefaultCustomerUseCase.execute({ tenantId });
+
+      if (result.success) {
+        res.status(201).json(result);
+      } else {
+        res.status(500).json(result);
+      }
+    } catch (error) {
+      console.error('Error in setupDefaultCustomer controller:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error'
+      });
+    }
+  };
+
+  public setupDefaultSuperAdmin = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { tenantId } = req.params;
+      
+      if (!tenantId) {
+        res.status(400).json({
+          success: false,
+          error: 'Tenant ID is required'
+        });
+        return;
+      }
+
+      const result = await this.setupDefaultSuperAdminUseCase.execute({ tenantId });
+
+      if (result.success) {
+        res.status(201).json(result);
+      } else {
+        res.status(500).json(result);
+      }
+    } catch (error) {
+      console.error('Error in setupDefaultSuperAdmin controller:', error);
       res.status(500).json({
         success: false,
         error: 'Internal server error'

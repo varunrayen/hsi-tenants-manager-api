@@ -53,11 +53,11 @@ export class CustomerService implements IBaseService<ICustomer> {
   }
 
   async findByTenantId(tenantId: string): Promise<ICustomer | null> {
-    return await this.model.findOne({ tenantId }).exec();
+    return await this.model.findOne({ tenant: tenantId }).exec();
   }
 
   async deleteByTenantId(tenantId: string, session?: any): Promise<boolean> {
-    const result = await this.model.deleteOne({ tenantId }, { session }).exec();
+    const result = await this.model.deleteOne({ tenant: tenantId }, { session }).exec();
     return result.deletedCount > 0;
   }
 } 

@@ -47,13 +47,24 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
         // Create customer if provided
         if (customer) {
           customerDoc = await this.customerService.create({
-            tenantId,
-            companyName: customer.companyName,
-            contactPerson: customer.contactPerson,
-            email: customer.email,
-            phone: customer.phone,
-            address: customer.address,
-            billingInfo: customer.billingInfo
+            name: customer.companyName || "Default",
+            code: "DEF",
+            tenant: tenantId,
+            isDefault: true,
+            warehouses: [],
+            currency: "$",
+            currentBillingProfile: null,
+            active: true,
+            metaData: {
+              ticket: "HOP-5833"
+            },
+            settings: {
+              workflows: {
+                inbound: {
+                  enabled: true
+                }
+              }
+            }
           }, session);
         }
 
@@ -82,7 +93,40 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
 
         // Create super admin if provided
         if (superAdmin) {
-          userDoc = await this.userService.createSuperAdmin(tenantId, superAdmin, session);
+          userDoc = await this.userService.create({
+            name: "Super Admin",
+            username: superAdmin.username || "super.admin",
+            password: superAdmin.password || "$2a$10$muDypVeYS0APX0/XG/vELO/xrew5H51kB17YcgEtWT5QW7.MWwCEa",
+            role: "ADMIN",
+            hopstackModules: null,
+            permissions: [
+              { route: "/orders", readable: true, writable: true },
+              { route: "/warehouses", readable: true, writable: true },
+              { route: "/customers", readable: true, writable: true },
+              { route: "/users", readable: true, writable: true }
+            ],
+            pagePreferences: [
+              { route: "/orders", visible: true },
+              { route: "/customers", visible: true },
+              { route: "/users", visible: true }
+            ],
+            tenant: tenantId,
+            isDefault: true,
+            email: superAdmin.email || "admin@company.com",
+            isEmailVerified: true,
+            termsAndConditionsAccepted: true,
+            activated: true,
+            meta: {
+              lastLogin: Date.now(),
+              lastLoginPlatform: "web",
+              lastLoginIp: "::1",
+              lastLoginOs: null,
+              lastLoginOsVersion: null,
+              lastLoginModel: null,
+              lastLoginAppVersionName: null,
+              lastLoginAppVersionCode: null
+            }
+          }, session);
         }
 
         // Create default roles if we have a superAdmin

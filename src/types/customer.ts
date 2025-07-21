@@ -1,14 +1,28 @@
 import { Document } from 'mongoose';
-import { Address, BillingInfo } from './common';
+
+export interface CustomerSettings {
+  workflows: {
+    inbound: {
+      enabled: boolean;
+    };
+  };
+}
+
+export interface CustomerMetaData {
+  ticket?: string;
+}
 
 export interface ICustomer extends Document {
-  tenantId: string;
-  companyName: string;
-  contactPerson: string;
-  email: string;
-  phone: string;
-  address: Address;
-  billingInfo: BillingInfo;
+  name: string;
+  code: string;
+  tenant: string;
+  isDefault: boolean;
+  warehouses: string[];
+  currency: string;
+  currentBillingProfile: string | null;
+  active: boolean;
+  metaData: CustomerMetaData;
+  settings: CustomerSettings;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -11,5 +11,7 @@ router.get('/:id', tenantController.getTenantById);
 router.put('/:id', validateUpdateTenant, tenantController.updateTenant);
 router.delete('/:id', tenantController.deleteTenant);
 router.post('/:tenantId/setup/warehouse', tenantController.setupDefaultWarehouse);
+router.post('/:tenantId/setup/customer', tenantController.setupDefaultCustomer);
+router.post('/:tenantId/setup/superadmin', tenantController.setupDefaultSuperAdmin);
 
 export default router;

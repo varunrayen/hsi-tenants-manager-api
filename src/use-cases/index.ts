@@ -5,4 +5,6 @@ export * from './GetTenantUseCase';
 export * from './UpdateTenantUseCase';
 export * from './DeleteTenantUseCase';
 export * from './ListTenantsUseCase';
-export * from './SetupDefaultWarehouseUseCase'; 
+export * from './SetupDefaultWarehouseUseCase';
+export * from './SetupDefaultCustomerUseCase';
+export * from './SetupDefaultSuperAdminUseCase'; 

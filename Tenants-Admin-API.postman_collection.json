@@ -145,6 +145,52 @@
             "description": "Create a default warehouse for a tenant with predefined settings"
           },
           "response": []
+        },
+        {
+          "name": "Setup Default Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tenants/{{tenant_id}}/setup/customer",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tenants", "{{tenant_id}}", "setup", "customer"]
+            },
+            "description": "Create a default customer for a tenant with predefined settings"
+          },
+          "response": []
+        },
+        {
+          "name": "Setup Default Super Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tenants/{{tenant_id}}/setup/superadmin",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tenants", "{{tenant_id}}", "setup", "superadmin"]
+            },
+            "description": "Create a default super admin user for a tenant with full permissions"
+          },
+          "response": []
         }
       ],
       "description": "Endpoints for managing tenants"
