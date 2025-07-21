@@ -191,6 +191,43 @@
             "description": "Create a default super admin user for a tenant with full permissions"
           },
           "response": []
+        },
+        {
+          "name": "Setup Default Entity Types",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tenants/{{tenant_id}}/setup/entities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tenants", "{{tenant_id}}", "setup", "entities"]
+            },
+            "description": "Create default ADMIN and ASSOCIATE entity types (roles) for a tenant with predefined permissions"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tenant Onboarding Progress",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tenants/{{tenant_id}}/onboarding/progress",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tenants", "{{tenant_id}}", "onboarding", "progress"]
+            },
+            "description": "Get the onboarding progress for a tenant including default customer, warehouse, and super admin details"
+          },
+          "response": []
         }
       ],
       "description": "Endpoints for managing tenants"

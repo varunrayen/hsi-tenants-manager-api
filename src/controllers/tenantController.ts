@@ -8,7 +8,9 @@ import {
   ListTenantsUseCase,
   SetupDefaultWarehouseUseCase,
   SetupDefaultCustomerUseCase,
-  SetupDefaultSuperAdminUseCase
+  SetupDefaultSuperAdminUseCase,
+  GetTenantOnboardingProgressUseCase,
+  SetupDefaultEntityTypesUseCase
 } from '../use-cases';
 
 export class TenantController {
@@ -21,6 +23,8 @@ export class TenantController {
   private setupDefaultWarehouseUseCase: SetupDefaultWarehouseUseCase;
   private setupDefaultCustomerUseCase: SetupDefaultCustomerUseCase;
   private setupDefaultSuperAdminUseCase: SetupDefaultSuperAdminUseCase;
+  private getTenantOnboardingProgressUseCase: GetTenantOnboardingProgressUseCase;
+  private setupDefaultEntityTypesUseCase: SetupDefaultEntityTypesUseCase;
 
   constructor() {
     this.createTenantUseCase = new CreateTenantUseCase();
@@ -32,6 +36,8 @@ export class TenantController {
     this.setupDefaultWarehouseUseCase = new SetupDefaultWarehouseUseCase();
     this.setupDefaultCustomerUseCase = new SetupDefaultCustomerUseCase();
     this.setupDefaultSuperAdminUseCase = new SetupDefaultSuperAdminUseCase();
+    this.getTenantOnboardingProgressUseCase = new GetTenantOnboardingProgressUseCase();
+    this.setupDefaultEntityTypesUseCase = new SetupDefaultEntityTypesUseCase();
   }
 
   public createTenant = async (req: Request, res: Response): Promise<void> => {
@@ -257,6 +263,62 @@ export class TenantController {
       }
     } catch (error) {
       console.error('Error in setupDefaultSuperAdmin controller:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error'
+      });
+    }
+  };
+
+  public getTenantOnboardingProgress = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { tenantId } = req.params;
+      
+      if (!tenantId) {
+        res.status(400).json({
+          success: false,
+          error: 'Tenant ID is required'
+        });
+        return;
+      }
+
+      const result = await this.getTenantOnboardingProgressUseCase.execute({ tenantId });
+
+      if (result.success) {
+        res.json(result);
+      } else {
+        res.status(500).json(result);
+      }
+    } catch (error) {
+      console.error('Error in getTenantOnboardingProgress controller:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error'
+      });
+    }
+  };
+
+  public setupDefaultEntityTypes = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { tenantId } = req.params;
+      
+      if (!tenantId) {
+        res.status(400).json({
+          success: false,
+          error: 'Tenant ID is required'
+        });
+        return;
+      }
+
+      const result = await this.setupDefaultEntityTypesUseCase.execute({ tenantId });
+
+      if (result.success) {
+        res.status(201).json(result);
+      } else {
+        res.status(500).json(result);
+      }
+    } catch (error) {
+      console.error('Error in setupDefaultEntityTypes controller:', error);
       res.status(500).json({
         success: false,
         error: 'Internal server error'

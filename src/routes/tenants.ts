@@ -13,5 +13,7 @@ router.delete('/:id', tenantController.deleteTenant);
 router.post('/:tenantId/setup/warehouse', tenantController.setupDefaultWarehouse);
 router.post('/:tenantId/setup/customer', tenantController.setupDefaultCustomer);
 router.post('/:tenantId/setup/superadmin', tenantController.setupDefaultSuperAdmin);
+router.post('/:tenantId/setup/entities', tenantController.setupDefaultEntityTypes);
+router.get('/:tenantId/onboarding/progress', tenantController.getTenantOnboardingProgress);
 
 export default router;

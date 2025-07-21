@@ -7,4 +7,6 @@ export * from './DeleteTenantUseCase';
 export * from './ListTenantsUseCase';
 export * from './SetupDefaultWarehouseUseCase';
 export * from './SetupDefaultCustomerUseCase';
-export * from './SetupDefaultSuperAdminUseCase'; 
+export * from './SetupDefaultSuperAdminUseCase';
+export * from './GetTenantOnboardingProgressUseCase';
+export * from './SetupDefaultEntityTypesUseCase'; 

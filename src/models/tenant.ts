@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { ITenant, ICustomer, IWarehouse, IUser, IRole } from '../types';
+import { ITenant, ICustomer, IWarehouse, IUser, IRole, IEntityType } from '../types';
 
 const TenantSchema: Schema = new Schema({
   name: { type: String, required: true },
@@ -152,8 +152,36 @@ const RoleSchema: Schema = new Schema({
   timestamps: true
 });
 
+const permissionOptionSchema = new Schema({
+  name: { type: String, required: true },
+  href: { type: String },
+  selectedImage: { type: String, required: true },
+  unselectedImage: { type: String, required: true },
+  type: { type: String },
+  readable: { type: Boolean },
+  writable: { type: Boolean },
+  isBeta: { type: Boolean },
+  children: [{ type: Schema.Types.Mixed }]
+}, { _id: false });
+
+const EntityTypeSchema: Schema = new Schema({
+  name: { type: String, required: true },
+  entityParent: { type: String, required: true },
+  attributes: {
+    permissionOptions: [permissionOptionSchema]
+  },
+  customers: { type: Schema.Types.Mixed, default: null },
+  warehouses: { type: Schema.Types.Mixed, default: null },
+  subEntityParents: { type: Schema.Types.Mixed, default: null },
+  code: { type: String, default: null },
+  tenant: { type: String, required: true }
+}, {
+  timestamps: true
+});
+
 export const Tenant = mongoose.model<ITenant>('Tenant', TenantSchema);
 export const Customer = mongoose.model<ICustomer>('Customer', CustomerSchema);
 export const Warehouse = mongoose.model<IWarehouse>('Warehouse', WarehouseSchema);
 export const User = mongoose.model<IUser>('User', UserSchema);
 export const Role = mongoose.model<IRole>('Role', RoleSchema);
+export const EntityType = mongoose.model<IEntityType>('EntityType', EntityTypeSchema);
