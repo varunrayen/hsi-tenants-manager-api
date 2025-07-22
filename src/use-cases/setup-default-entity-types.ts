@@ -1,5 +1,5 @@
 import { EntityTypeService } from '../services';
-import { IUseCase, UseCaseResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse } from './base';
 import { IEntityType } from '../types';
 
 interface SetupDefaultEntityTypesRequest {

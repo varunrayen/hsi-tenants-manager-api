@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 import DatabaseConnection from '../config/database';
 import { CreateTenantRequest } from '../types';
-import { 
-  TenantService, 
-  CustomerService, 
-  WarehouseService, 
-  UserService, 
-  RoleService 
+import {
+  TenantService,
+  CustomerService,
+  WarehouseService,
+  UserService,
+  RoleService
 } from '../services';
-import { IUseCase, UseCaseResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse } from './base';
 
 interface CreateTenantResponse {
   tenantId: string;
@@ -176,4 +176,4 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
       await session.endSession();
     }
   }
-} 
+}

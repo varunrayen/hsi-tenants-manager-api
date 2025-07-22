@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import DatabaseConnection from '../config/database';
 import { TenantService } from '../services';
-import { IUseCase, UseCaseResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse } from './base';
 
 interface CreateTenantDirectRequest {
   [key: string]: any; // Direct tenant data
@@ -65,4 +65,4 @@ export class CreateTenantDirectUseCase implements IUseCase<CreateTenantDirectReq
       await session.endSession();
     }
   }
-} 
+}

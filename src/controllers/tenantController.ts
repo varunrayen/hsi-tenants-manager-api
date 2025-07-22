@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import {
-  CreateTenantUseCase,
   CreateTenantDirectUseCase,
-  GetTenantUseCase,
-  UpdateTenantUseCase,
+  CreateTenantUseCase,
   DeleteTenantUseCase,
-  ListTenantsUseCase,
-  SetupDefaultWarehouseUseCase,
-  SetupDefaultCustomerUseCase,
-  SetupDefaultSuperAdminUseCase,
   GetTenantOnboardingProgressUseCase,
-  SetupDefaultEntityTypesUseCase
+  GetTenantUseCase,
+  ListTenantsUseCase,
+  SetupDefaultCustomerUseCase,
+  SetupDefaultEntityTypesUseCase,
+  SetupDefaultSuperAdminUseCase,
+  SetupDefaultWarehouseUseCase,
+  UpdateTenantUseCase
 } from '../use-cases';
 
 export class TenantController {

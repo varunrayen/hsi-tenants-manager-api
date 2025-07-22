@@ -1,11 +1,11 @@
 import { Types } from 'mongoose';
-import { 
-  TenantService, 
-  CustomerService, 
-  WarehouseService, 
-  UserService 
+import {
+  TenantService,
+  CustomerService,
+  WarehouseService,
+  UserService
 } from '../services';
-import { IUseCase, UseCaseResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse } from './base';
 
 interface GetTenantRequest {
   id: string;
@@ -73,4 +73,4 @@ export class GetTenantUseCase implements IUseCase<GetTenantRequest, UseCaseRespo
       };
     }
   }
-} 
+}

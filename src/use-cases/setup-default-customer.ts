@@ -1,5 +1,5 @@
 import { CustomerService } from '../services';
-import { IUseCase, UseCaseResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse } from './base';
 import { ICustomer } from '../types';
 
 interface SetupDefaultCustomerRequest {

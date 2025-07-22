@@ -1,5 +1,5 @@
 import { TenantService } from '../services';
-import { IUseCase, UseCaseResponse, PaginationRequest, PaginationResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse, PaginationRequest, PaginationResponse } from './base';
 import { ITenant } from '../types';
 
 interface ListTenantsRequest extends PaginationRequest {}
@@ -42,4 +42,4 @@ export class ListTenantsUseCase implements IUseCase<ListTenantsRequest, UseCaseR
       };
     }
   }
-} 
+}

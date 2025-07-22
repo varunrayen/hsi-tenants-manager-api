@@ -1,5 +1,5 @@
 import { WarehouseService } from '../services';
-import { IUseCase, UseCaseResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse } from './base';
 import { IWarehouse } from '../types';
 
 interface SetupDefaultWarehouseRequest {

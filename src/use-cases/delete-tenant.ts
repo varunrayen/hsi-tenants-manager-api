@@ -1,13 +1,13 @@
 import { Types } from 'mongoose';
 import DatabaseConnection from '../config/database';
-import { 
-  TenantService, 
-  CustomerService, 
-  WarehouseService, 
-  UserService, 
-  RoleService 
+import {
+  TenantService,
+  CustomerService,
+  WarehouseService,
+  UserService,
+  RoleService
 } from '../services';
-import { IUseCase, UseCaseResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse } from './base';
 
 interface DeleteTenantRequest {
   id: string;
@@ -71,4 +71,4 @@ export class DeleteTenantUseCase implements IUseCase<DeleteTenantRequest, UseCas
       await session.endSession();
     }
   }
-} 
+}

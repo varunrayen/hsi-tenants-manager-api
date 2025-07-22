@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { TenantService } from '../services';
-import { IUseCase, UseCaseResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse } from './base';
 
 interface UpdateTenantRequest {
   id: string;
@@ -46,4 +46,4 @@ export class UpdateTenantUseCase implements IUseCase<UpdateTenantRequest, UseCas
       };
     }
   }
-} 
+}

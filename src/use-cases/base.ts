@@ -22,4 +22,4 @@ export interface PaginationResponse<T> {
     total: number;
     totalPages: number;
   };
-} 
+}

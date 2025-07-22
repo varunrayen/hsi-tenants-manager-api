@@ -1,5 +1,5 @@
 import { UserService } from '../services';
-import { IUseCase, UseCaseResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse } from './base';
 import { IUser } from '../types';
 
 interface SetupDefaultSuperAdminRequest {

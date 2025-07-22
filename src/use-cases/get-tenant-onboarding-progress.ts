@@ -1,5 +1,5 @@
 import { CustomerService, WarehouseService, UserService, EntityTypeService } from '../services';
-import { IUseCase, UseCaseResponse } from './BaseUseCase';
+import { IUseCase, UseCaseResponse } from './base';
 import { ICustomer, IWarehouse, IUser, IEntityType } from '../types';
 
 interface GetTenantOnboardingProgressRequest {
@@ -32,15 +32,15 @@ export class GetTenantOnboardingProgressUseCase implements IUseCase<GetTenantOnb
       const { tenantId } = request;
 
       // Find default customer for the tenant
-      const customer = await this.customerService.findOne({ 
-        tenant: tenantId, 
-        isDefault: true 
+      const customer = await this.customerService.findOne({
+        tenant: tenantId,
+        isDefault: true
       });
 
       // Find default warehouse for the tenant
-      const warehouse = await this.warehouseService.findOne({ 
-        tenant: tenantId, 
-        isDefault: true 
+      const warehouse = await this.warehouseService.findOne({
+        tenant: tenantId,
+        isDefault: true
       });
 
       // Find super admin user for the tenant
@@ -56,8 +56,8 @@ export class GetTenantOnboardingProgressUseCase implements IUseCase<GetTenantOnb
       } : null;
 
       // Check if onboarding is complete (should have at least 2 entity types: ADMIN and ASSOCIATE)
-      const hasRequiredEntityTypes = entityTypes.length >= 2 && 
-        entityTypes.some(et => et.name === 'ADMIN') && 
+      const hasRequiredEntityTypes = entityTypes.length >= 2 &&
+        entityTypes.some(et => et.name === 'ADMIN') &&
         entityTypes.some(et => et.name === 'ASSOCIATE');
 
       const isComplete = !!(customer && warehouse && superAdmin && hasRequiredEntityTypes);
