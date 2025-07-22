@@ -55,15 +55,28 @@ export class TenantService extends BaseService<ITenant> {
       },
       allowConstituentsPickingForBundleOrders: false,
       backOrderEnabled: false,
+      blindReceiving: false,
       blockParentLocations: false,
+      compliance: false,
       enableLocationValidation: false,
+      isOutboundPlanningEnabled: false,
+      isProductAliasAllowed: false,
+      isProductLinkageAllowed: false,
       isSTOEnabled: false,
+      maximumPalletClearanceStrategy: false,
       metricsConfig: {
         preferredDimensionUnit: ['cm'],
         preferredWeightUnit: ['kg']
       },
+      moveSkuBinMappingEnabled: false,
       multiAccountIntegrationSupportEnabled: false,
-      isOutboundPlanningEnabled: false
+      multiplePalletsAtOneLocation: false,
+      overReceivingOnConsignments: false,
+      processLocksOnManualBatching: false,
+      requireConsignmentForPutaway: false,
+      skipBatchingPreview: false,
+      softAllocationOnBatching: false,
+      splitOrderEnabled: false
     };
   }
 } 

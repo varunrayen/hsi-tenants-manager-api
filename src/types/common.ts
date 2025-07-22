@@ -53,12 +53,25 @@ export interface TenantSettings {
   activities: ActivitySettings;
   allowConstituentsPickingForBundleOrders: boolean;
   backOrderEnabled: boolean;
+  blindReceiving: boolean;
   blockParentLocations: boolean;
+  compliance: boolean;
   enableLocationValidation: boolean;
-  isSTOEnabled: boolean;
-  metricsConfig: MetricsConfig;
-  multiAccountIntegrationSupportEnabled: boolean;
   isOutboundPlanningEnabled: boolean;
+  isProductAliasAllowed: boolean;
+  isProductLinkageAllowed: boolean;
+  isSTOEnabled: boolean;
+  maximumPalletClearanceStrategy: boolean;
+  metricsConfig: MetricsConfig;
+  moveSkuBinMappingEnabled: boolean;
+  multiAccountIntegrationSupportEnabled: boolean;
+  multiplePalletsAtOneLocation: boolean;
+  overReceivingOnConsignments: boolean;
+  processLocksOnManualBatching: boolean;
+  requireConsignmentForPutaway: boolean;
+  skipBatchingPreview: boolean;
+  softAllocationOnBatching: boolean;
+  splitOrderEnabled: boolean;
 }
 
 export type TenantStatus = 'active' | 'inactive' | 'pending';
