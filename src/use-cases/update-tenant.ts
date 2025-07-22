@@ -17,6 +17,8 @@ export class UpdateTenantUseCase implements IUseCase<UpdateTenantRequest, UseCas
   async execute(request: UpdateTenantRequest): Promise<UseCaseResponse<null>> {
     try {
       const { id, updateData } = request;
+
+      console.log('updateData', updateData);
       
       if (!id || !Types.ObjectId.isValid(id)) {
         return {

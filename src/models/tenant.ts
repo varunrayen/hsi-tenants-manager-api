@@ -39,15 +39,28 @@ const TenantSchema: Schema = new Schema({
     },
     allowConstituentsPickingForBundleOrders: { type: Boolean, default: true },
     backOrderEnabled: { type: Boolean, default: true },
+    blindReceiving: { type: Boolean, default: false },
     blockParentLocations: { type: Boolean, default: true },
+    compliance: { type: Boolean, default: false },
     enableLocationValidation: { type: Boolean, default: true },
+    isOutboundPlanningEnabled: { type: Boolean, default: true },
+    isProductAliasAllowed: { type: Boolean, default: false },
+    isProductLinkageAllowed: { type: Boolean, default: false },
     isSTOEnabled: { type: Boolean, default: true },
+    maximumPalletClearanceStrategy: { type: Boolean, default: false },
     metricsConfig: {
       preferredDimensionUnit: { type: [String], default: ['inches'] },
       preferredWeightUnit: { type: [String], default: ['pounds'] }
     },
+    moveSkuBinMappingEnabled: { type: Boolean, default: false },
     multiAccountIntegrationSupportEnabled: { type: Boolean, default: true },
-    isOutboundPlanningEnabled: { type: Boolean, default: true }
+    multiplePalletsAtOneLocation: { type: Boolean, default: false },
+    overReceivingOnConsignments: { type: Boolean, default: false },
+    processLocksOnManualBatching: { type: Boolean, default: false },
+    requireConsignmentForPutaway: { type: Boolean, default: false },
+    skipBatchingPreview: { type: Boolean, default: false },
+    softAllocationOnBatching: { type: Boolean, default: false },
+    splitOrderEnabled: { type: Boolean, default: false }
   },
   integrations: { type: [String], default: [] },
   typeOfCustomer: { 
