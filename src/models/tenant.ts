@@ -116,9 +116,11 @@ const WarehouseSchema: Schema = new Schema({
   splitOrdersEnabled: { type: Boolean, default: null },
   typeOfWarehouse: [{ type: String, required: true }],
   address: { type: addressSchema, required: true },
-  storageTypes: [{ type: String, required: true }]
+  storageTypes: [{ type: String, required: true }],
+  createdAt: { type: Number, default: Date.now },
+  updatedAt: { type: Number, default: Date.now }
 }, {
-  timestamps: true
+  timestamps: false
 });
 
 const UserSchema: Schema = new Schema({
