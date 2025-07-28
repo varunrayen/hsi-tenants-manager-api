@@ -14,6 +14,12 @@ export interface IAuditLog extends Document {
   changes: {
     before?: any;
     after?: any;
+    modified?: {
+      [fieldPath: string]: {
+        from: any;
+        to: any;
+      };
+    };
   };
   metadata?: {
     ip?: string;
@@ -45,6 +51,12 @@ export interface CreateAuditLogRequest {
   changes?: {
     before?: any;
     after?: any;
+    modified?: {
+      [fieldPath: string]: {
+        from: any;
+        to: any;
+      };
+    };
   };
   metadata?: {
     ip?: string;

@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import { TenantService, AuditService } from '../services';
 import { IUseCase, UseCaseResponse } from './base';
 import { AuditAction } from '../types';
+import { calculateDiff } from '../utils/diff-helper';
 
 interface UpdateTenantRequest {
   id: string;
@@ -53,6 +54,11 @@ export class UpdateTenantUseCase implements IUseCase<UpdateTenantRequest, UseCas
         };
       }
 
+      // Calculate specific field changes
+      const beforeData = existingTenant.toObject();
+      const afterData = result.toObject();
+      const modifiedFields = calculateDiff(beforeData, afterData);
+
       // Log audit entry for tenant update
       await this.auditService.logAction({
         tenantId: id,
@@ -63,8 +69,9 @@ export class UpdateTenantUseCase implements IUseCase<UpdateTenantRequest, UseCas
           username: 'system'
         },
         changes: {
-          before: existingTenant.toObject(),
-          after: result.toObject()
+          before: beforeData,
+          after: afterData,
+          modified: modifiedFields
         },
         metadata: {
           source: 'tenant-update'

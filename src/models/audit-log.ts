@@ -50,6 +50,10 @@ const auditLogSchema = new Schema<IAuditLog>({
     after: {
       type: Schema.Types.Mixed,
       required: false
+    },
+    modified: {
+      type: Schema.Types.Mixed,
+      required: false
     }
   },
   metadata: {
