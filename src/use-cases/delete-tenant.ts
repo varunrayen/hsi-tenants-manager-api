@@ -4,8 +4,7 @@ import {
   TenantService,
   CustomerService,
   WarehouseService,
-  UserService,
-  RoleService
+  UserService
 } from '../services';
 import { IUseCase, UseCaseResponse } from './base';
 
@@ -18,14 +17,12 @@ export class DeleteTenantUseCase implements IUseCase<DeleteTenantRequest, UseCas
   private customerService: CustomerService;
   private warehouseService: WarehouseService;
   private userService: UserService;
-  private roleService: RoleService;
 
   constructor() {
     this.tenantService = new TenantService();
     this.customerService = new CustomerService();
     this.warehouseService = new WarehouseService();
     this.userService = new UserService();
-    this.roleService = new RoleService();
   }
 
   async execute(request: DeleteTenantRequest): Promise<UseCaseResponse<null>> {
@@ -50,7 +47,6 @@ export class DeleteTenantUseCase implements IUseCase<DeleteTenantRequest, UseCas
         await this.customerService.deleteByTenantId(tenant.subdomain, session);
         await this.warehouseService.deleteByTenantId(tenant.subdomain, session);
         await this.userService.deleteByTenantId(tenant.subdomain, session);
-        await this.roleService.deleteByTenantId(tenant.subdomain, session);
         await this.tenantService.deleteById(id, session);
 
         return true;

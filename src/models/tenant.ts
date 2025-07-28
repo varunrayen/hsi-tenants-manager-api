@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { ITenant, ICustomer, IWarehouse, IUser, IRole, IEntityType } from '../types';
+import { ITenant, ICustomer, IWarehouse, IUser, IEntityType } from '../types';
 
 const TenantSchema: Schema = new Schema({
   name: { type: String, required: true },
@@ -92,9 +92,11 @@ const CustomerSchema: Schema = new Schema({
         enabled: { type: Boolean, default: true }
       }
     }
-  }
+  },
+  createdAt: { type: Number, default: Date.now },
+  updatedAt: { type: Number, default: Date.now }
 }, {
-  timestamps: true
+  timestamps: false
 });
 
 const addressSchema = new Schema({
@@ -158,15 +160,6 @@ const UserSchema: Schema = new Schema({
   timestamps: true
 });
 
-const RoleSchema: Schema = new Schema({
-  tenantId: { type: String, required: true },
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  permissions: { type: [String], required: true },
-  isSystemRole: { type: Boolean, default: false }
-}, {
-  timestamps: true
-});
 
 const permissionOptionSchema = new Schema({
   name: { type: String, required: true },
@@ -199,5 +192,4 @@ export const Tenant = mongoose.model<ITenant>('Tenant', TenantSchema);
 export const Customer = mongoose.model<ICustomer>('Customer', CustomerSchema);
 export const Warehouse = mongoose.model<IWarehouse>('Warehouse', WarehouseSchema);
 export const User = mongoose.model<IUser>('User', UserSchema);
-export const Role = mongoose.model<IRole>('Role', RoleSchema);
 export const EntityType = mongoose.model<IEntityType>('EntityType', EntityTypeSchema);

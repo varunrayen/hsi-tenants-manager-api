@@ -4,6 +4,7 @@ import { ICustomer } from '../types';
 
 interface SetupDefaultCustomerRequest {
   tenantId: string;
+  warehouses?: string[];
 }
 
 export class SetupDefaultCustomerUseCase implements IUseCase<SetupDefaultCustomerRequest, UseCaseResponse<ICustomer>> {
@@ -15,23 +16,23 @@ export class SetupDefaultCustomerUseCase implements IUseCase<SetupDefaultCustome
 
   async execute(request: SetupDefaultCustomerRequest): Promise<UseCaseResponse<ICustomer>> {
     try {
-      const { tenantId } = request;
+      const { tenantId, warehouses } = request;
 
       const defaultCustomerData = {
         name: "Default",
         code: "DEF",
         tenant: tenantId,
         isDefault: true,
-        warehouses: [],
+        warehouses: warehouses || [],
         currency: "$",
         currentBillingProfile: null,
         active: true,
-        metaData: {
-          ticket: "HOP-5833"
-        },
         settings: {
           workflows: {
             inbound: {
+              enabled: true
+            },
+            outbound: {
               enabled: true
             }
           }

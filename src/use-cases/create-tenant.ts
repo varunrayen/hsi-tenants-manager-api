@@ -6,7 +6,6 @@ import {
   CustomerService,
   WarehouseService,
   UserService,
-  RoleService,
   AuditService
 } from '../services';
 import { IUseCase, UseCaseResponse } from './base';
@@ -24,7 +23,6 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
   private customerService: CustomerService;
   private warehouseService: WarehouseService;
   private userService: UserService;
-  private roleService: RoleService;
   private auditService: AuditService;
 
   constructor() {
@@ -32,7 +30,6 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
     this.customerService = new CustomerService();
     this.warehouseService = new WarehouseService();
     this.userService = new UserService();
-    this.roleService = new RoleService();
     this.auditService = new AuditService();
   }
 
@@ -47,31 +44,9 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
 
         let customerDoc, warehouseDoc, userDoc;
 
-        // Create customer if provided
-        if (customer) {
-          customerDoc = await this.customerService.create({
-            name: customer.companyName || "Default",
-            code: "DEF",
-            tenant: tenantId,
-            isDefault: true,
-            warehouses: [],
-            currency: "$",
-            currentBillingProfile: null,
-            active: true,
-            metaData: {
-              ticket: "HOP-5833"
-            },
-            settings: {
-              workflows: {
-                inbound: {
-                  enabled: true
-                }
-              }
-            }
-          }, session);
-        }
+        console.log("customer", customer);
 
-        // Create warehouse if provided
+        // Create warehouse if provided (create warehouse first to get its ID)
         if (warehouse) {
           warehouseDoc = await this.warehouseService.create({
             name: warehouse.name,
@@ -91,6 +66,30 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
               line1: warehouse.address?.street || "Default Address"
             },
             storageTypes: ["Ambient"]
+          }, session);
+        }
+
+        // Create customer if provided
+        if (customer) {
+          customerDoc = await this.customerService.create({
+            name: customer.companyName || "Default",
+            code: "DEF",
+            tenant: tenantId,
+            isDefault: true,
+            warehouses: customer.warehouses || [],
+            currency: "$",
+            currentBillingProfile: null,
+            active: true,
+            metaData: {
+              ticket: "HOP-5833"
+            },
+            settings: {
+              workflows: {
+                inbound: {
+                  enabled: true
+                }
+              }
+            }
           }, session);
         }
 
@@ -132,10 +131,6 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
           }, session);
         }
 
-        // Create default roles if we have a superAdmin
-        if (superAdmin) {
-          await this.roleService.createDefaultRoles(tenantId, session);
-        }
 
         // Prepare tenant data with defaults
         const tenantData = {

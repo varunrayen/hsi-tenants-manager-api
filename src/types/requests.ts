@@ -36,6 +36,7 @@ export interface CreateTenantRequest {
     phone: string;
     address: Address;
     billingInfo: BillingInfo;
+    warehouses?: string[];
   };
   warehouse: {
     name: string;

@@ -254,7 +254,10 @@ export class TenantController {
         return;
       }
 
-      const result = await this.setupDefaultCustomerUseCase.execute({ tenantId });
+      const result = await this.setupDefaultCustomerUseCase.execute({ 
+        tenantId,
+        ...req.body 
+      });
 
       if (result.success) {
         res.status(201).json(result);
