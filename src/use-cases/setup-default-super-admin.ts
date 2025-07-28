@@ -67,16 +67,6 @@ export class SetupDefaultSuperAdminUseCase implements IUseCase<SetupDefaultSuper
         isEmailVerified: true,
         termsAndConditionsAccepted: true,
         activated: true,
-        meta: {
-          lastLogin: Date.now(),
-          lastLoginPlatform: "web",
-          lastLoginIp: "::ffff:20.0.1.187",
-          lastLoginOs: null,
-          lastLoginOsVersion: null,
-          lastLoginModel: null,
-          lastLoginAppVersionName: null,
-          lastLoginAppVersionCode: null
-        }
       };
 
       const superAdmin = await this.userService.create(defaultSuperAdminData);

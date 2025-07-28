@@ -155,9 +155,11 @@ const UserSchema: Schema = new Schema({
     lastLoginModel: { type: String, default: null },
     lastLoginAppVersionName: { type: String, default: null },
     lastLoginAppVersionCode: { type: String, default: null }
-  }
+  },
+  createdAt: { type: Number, default: Date.now },
+  updatedAt: { type: Number, default: Date.now }
 }, {
-  timestamps: true
+  timestamps: false
 });
 
 
@@ -183,9 +185,11 @@ const EntityTypeSchema: Schema = new Schema({
   warehouses: { type: Schema.Types.Mixed, default: null },
   subEntityParents: { type: Schema.Types.Mixed, default: null },
   code: { type: String, default: null },
-  tenant: { type: String, required: true }
+  tenant: { type: String, required: true },
+  createdAt: { type: Number, default: Date.now },
+  updatedAt: { type: Number, default: Date.now }
 }, {
-  timestamps: true
+  timestamps: false
 });
 
 export const Tenant = mongoose.model<ITenant>('Tenant', TenantSchema);
