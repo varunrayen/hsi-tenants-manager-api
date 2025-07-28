@@ -22,6 +22,12 @@ export interface CreateTenantRequest {
     settings?: Partial<TenantSettings>;
     integrations?: string[];
     typeOfCustomer?: CustomerType[];
+    region?: string;
+    environment?: string;
+  };
+  performedBy?: {
+    username: string;
+    email?: string;
   };
   customer: {
     companyName: string;

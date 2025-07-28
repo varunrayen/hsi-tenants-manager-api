@@ -42,14 +42,34 @@ export class TenantController {
 
   public createTenant = async (req: Request, res: Response): Promise<void> => {
     try {
+      // Extract user info from headers for audit logging
+      const userEmail = req.headers['x-user-email'] as string;
+      const userName = req.headers['x-user-name'] as string;
+      
       // Check if the request body contains nested structure or direct tenant data
       const isNestedStructure = req.body.tenant !== undefined;
       
       let result;
       if (isNestedStructure) {
-        result = await this.createTenantUseCase.execute(req.body);
+        // Add user info to request for audit logging
+        const requestWithUser = {
+          ...req.body,
+          performedBy: {
+            username: userName || 'unknown',
+            email: userEmail
+          }
+        };
+        result = await this.createTenantUseCase.execute(requestWithUser);
       } else {
-        result = await this.createTenantDirectUseCase.execute(req.body);
+        // Add user info to request for audit logging
+        const requestWithUser = {
+          ...req.body,
+          performedBy: {
+            username: userName || 'unknown',
+            email: userEmail
+          }
+        };
+        result = await this.createTenantDirectUseCase.execute(requestWithUser);
       }
 
       if (result.success) {
@@ -135,9 +155,17 @@ export class TenantController {
         return;
       }
 
+      // Extract user info from headers for audit logging
+      const userEmail = req.headers['x-user-email'] as string;
+      const userName = req.headers['x-user-name'] as string;
+
       const result = await this.updateTenantUseCase.execute({
         id,
-        updateData: req.body
+        updateData: req.body,
+        performedBy: {
+          username: userName || 'unknown',
+          email: userEmail
+        }
       });
 
       if (result.success) {

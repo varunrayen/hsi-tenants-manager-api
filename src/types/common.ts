@@ -76,4 +76,4 @@ export interface TenantSettings {
 
 export type TenantStatus = 'active' | 'inactive' | 'pending';
 export type UserRole = 'super_admin' | 'admin' | 'user';
-export type CustomerType = '3PL' | 'Brand';
+export type CustomerType = '3PL' | 'Brand' | 'Prep Center';

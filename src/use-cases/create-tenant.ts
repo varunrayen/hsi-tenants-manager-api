@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
 import DatabaseConnection from '../config/database';
-import { CreateTenantRequest } from '../types';
+import { CreateTenantRequest, AuditAction } from '../types';
 import {
   TenantService,
   CustomerService,
   WarehouseService,
   UserService,
-  RoleService
+  RoleService,
+  AuditService
 } from '../services';
 import { IUseCase, UseCaseResponse } from './base';
 
@@ -24,6 +25,7 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
   private warehouseService: WarehouseService;
   private userService: UserService;
   private roleService: RoleService;
+  private auditService: AuditService;
 
   constructor() {
     this.tenantService = new TenantService();
@@ -31,6 +33,7 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
     this.warehouseService = new WarehouseService();
     this.userService = new UserService();
     this.roleService = new RoleService();
+    this.auditService = new AuditService();
   }
 
   async execute(request: CreateTenantRequest): Promise<UseCaseResponse<CreateTenantResponse>> {
@@ -152,6 +155,24 @@ export class CreateTenantUseCase implements IUseCase<CreateTenantRequest, UseCas
         };
 
         const tenantDoc = await this.tenantService.create(tenantData, session);
+
+        // Log audit entry for tenant creation
+        await this.auditService.logAction({
+          tenantId: tenantDoc.id,
+          action: AuditAction.CREATE,
+          entityType: 'Tenant',
+          entityId: tenantDoc.id,
+          performedBy: request.performedBy || {
+            username: 'system',
+            email: superAdmin?.email
+          },
+          changes: {
+            after: tenantData
+          },
+          metadata: {
+            source: 'tenant-creation-flow'
+          }
+        }, session);
 
         return {
           tenantId: tenantDoc.id,

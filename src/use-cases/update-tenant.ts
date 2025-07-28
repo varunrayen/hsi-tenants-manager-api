@@ -1,22 +1,30 @@
 import { Types } from 'mongoose';
-import { TenantService } from '../services';
+import { TenantService, AuditService } from '../services';
 import { IUseCase, UseCaseResponse } from './base';
+import { AuditAction } from '../types';
 
 interface UpdateTenantRequest {
   id: string;
   updateData: any;
+  performedBy?: {
+    userId?: string;
+    username: string;
+    email?: string;
+  };
 }
 
 export class UpdateTenantUseCase implements IUseCase<UpdateTenantRequest, UseCaseResponse<null>> {
   private tenantService: TenantService;
+  private auditService: AuditService;
 
   constructor() {
     this.tenantService = new TenantService();
+    this.auditService = new AuditService();
   }
 
   async execute(request: UpdateTenantRequest): Promise<UseCaseResponse<null>> {
     try {
-      const { id, updateData } = request;
+      const { id, updateData, performedBy } = request;
 
       console.log('updateData', updateData);
       
@@ -24,6 +32,15 @@ export class UpdateTenantUseCase implements IUseCase<UpdateTenantRequest, UseCas
         return {
           success: false,
           error: 'Invalid tenant ID'
+        };
+      }
+
+      // Get the current tenant data for audit log
+      const existingTenant = await this.tenantService.findById(id);
+      if (!existingTenant) {
+        return {
+          success: false,
+          error: 'Tenant not found'
         };
       }
 
@@ -35,6 +52,24 @@ export class UpdateTenantUseCase implements IUseCase<UpdateTenantRequest, UseCas
           error: 'Tenant not found'
         };
       }
+
+      // Log audit entry for tenant update
+      await this.auditService.logAction({
+        tenantId: id,
+        action: AuditAction.UPDATE,
+        entityType: 'Tenant',
+        entityId: id,
+        performedBy: performedBy || {
+          username: 'system'
+        },
+        changes: {
+          before: existingTenant.toObject(),
+          after: result.toObject()
+        },
+        metadata: {
+          source: 'tenant-update'
+        }
+      });
 
       return {
         success: true,

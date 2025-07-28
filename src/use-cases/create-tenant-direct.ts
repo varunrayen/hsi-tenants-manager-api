@@ -1,9 +1,16 @@
 import mongoose from 'mongoose';
 import DatabaseConnection from '../config/database';
-import { TenantService } from '../services';
+import { TenantService, AuditService } from '../services';
 import { IUseCase, UseCaseResponse } from './base';
+import { AuditAction } from '../types';
 
 interface CreateTenantDirectRequest {
+  region?: string;
+  environment?: string;
+  performedBy?: {
+    username: string;
+    email?: string;
+  };
   [key: string]: any; // Direct tenant data
 }
 
@@ -17,9 +24,11 @@ interface CreateTenantDirectResponse {
 
 export class CreateTenantDirectUseCase implements IUseCase<CreateTenantDirectRequest, UseCaseResponse<CreateTenantDirectResponse>> {
   private tenantService: TenantService;
+  private auditService: AuditService;
 
   constructor() {
     this.tenantService = new TenantService();
+    this.auditService = new AuditService();
   }
 
   async execute(request: CreateTenantDirectRequest): Promise<UseCaseResponse<CreateTenantDirectResponse>> {
@@ -41,6 +50,23 @@ export class CreateTenantDirectUseCase implements IUseCase<CreateTenantDirectReq
         };
 
         const tenantDoc = await this.tenantService.create(tenantData, session);
+
+        // Log audit entry for tenant creation
+        await this.auditService.logAction({
+          tenantId: tenantDoc.id,
+          action: AuditAction.CREATE,
+          entityType: 'Tenant',
+          entityId: tenantDoc.id,
+          performedBy: request.performedBy || {
+            username: 'system'
+          },
+          changes: {
+            after: tenantData
+          },
+          metadata: {
+            source: 'direct-tenant-creation'
+          }
+        }, session);
 
         return {
           tenantId: tenantDoc.id,

@@ -65,7 +65,7 @@ const TenantSchema: Schema = new Schema({
   integrations: { type: [String], default: [] },
   typeOfCustomer: { 
     type: [String], 
-    enum: ['3PL', 'Brand'], 
+    enum: ['3PL', 'Brand', 'Prep Center'], 
     default: ['3PL'] 
   },
   createdAt: { type: Number, default: Date.now },
@@ -123,7 +123,7 @@ const WarehouseSchema: Schema = new Schema({
 
 const UserSchema: Schema = new Schema({
   name: { type: String, required: true },
-  username: { type: String, required: true, unique: true },
+  username: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, required: true },
   hopstackModules: { type: Schema.Types.Mixed, default: null },
