@@ -1,6 +1,6 @@
 import { ICustomer } from '../types';
 import { Customer } from '../models';
-import { BaseService } from './BaseService';
+import { BaseService } from './base-service';
 
 export class CustomerService extends BaseService<ICustomer> {
   constructor() {

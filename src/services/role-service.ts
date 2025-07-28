@@ -1,6 +1,6 @@
 import { IRole } from '../types';
 import { Role } from '../models';
-import { BaseService } from './BaseService';
+import { BaseService } from './base-service';
 
 export class RoleService extends BaseService<IRole> {
   constructor() {

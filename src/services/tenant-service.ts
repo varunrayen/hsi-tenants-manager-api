@@ -1,6 +1,6 @@
 import { ITenant } from '../types';
 import { Tenant } from '../models';
-import { BaseService } from './BaseService';
+import { BaseService } from './base-service';
 
 export class TenantService extends BaseService<ITenant> {
   constructor() {

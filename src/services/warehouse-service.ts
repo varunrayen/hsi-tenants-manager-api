@@ -1,6 +1,6 @@
 import { IWarehouse } from '../types';
 import { Warehouse } from '../models';
-import { BaseService } from './BaseService';
+import { BaseService } from './base-service';
 
 export class WarehouseService extends BaseService<IWarehouse> {
   constructor() {

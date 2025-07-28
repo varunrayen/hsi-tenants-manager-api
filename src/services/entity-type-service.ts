@@ -1,6 +1,6 @@
 import { IEntityType } from '../types';
 import { EntityType } from '../models';
-import { BaseService } from './BaseService';
+import { BaseService } from './base-service';
 
 export class EntityTypeService extends BaseService<IEntityType> {
   constructor() {

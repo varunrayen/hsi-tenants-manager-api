@@ -1,6 +1,6 @@
 import { IUser } from '../types';
 import { User } from '../models';
-import { BaseService } from './BaseService';
+import { BaseService } from './base-service';
 import { hashPassword } from '../utils/helpers';
 
 export class UserService extends BaseService<IUser> {
