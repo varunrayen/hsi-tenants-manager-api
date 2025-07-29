@@ -5,6 +5,7 @@ import {
   DeleteTenantUseCase,
   GetTenantOnboardingProgressUseCase,
   GetTenantUseCase,
+  GetTenantAuditHistory,
   ListTenantsUseCase,
   SetupDefaultCustomerUseCase,
   SetupDefaultEntityTypesUseCase,
@@ -17,6 +18,7 @@ export class TenantController {
   private createTenantUseCase: CreateTenantUseCase;
   private createTenantDirectUseCase: CreateTenantDirectUseCase;
   private getTenantUseCase: GetTenantUseCase;
+  private getTenantAuditHistory: GetTenantAuditHistory;
   private updateTenantUseCase: UpdateTenantUseCase;
   private deleteTenantUseCase: DeleteTenantUseCase;
   private listTenantsUseCase: ListTenantsUseCase;
@@ -30,6 +32,7 @@ export class TenantController {
     this.createTenantUseCase = new CreateTenantUseCase();
     this.createTenantDirectUseCase = new CreateTenantDirectUseCase();
     this.getTenantUseCase = new GetTenantUseCase();
+    this.getTenantAuditHistory = new GetTenantAuditHistory();
     this.updateTenantUseCase = new UpdateTenantUseCase();
     this.deleteTenantUseCase = new DeleteTenantUseCase();
     this.listTenantsUseCase = new ListTenantsUseCase();
@@ -136,6 +139,29 @@ export class TenantController {
       }
     } catch (error) {
       console.error('Error in getTenantById controller:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error'
+      });
+    }
+  };
+
+  public getAuditHistory = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        res.status(400).json({
+          success: false,
+          error: 'Tenant ID is required'
+        });
+        return;
+      }
+
+      const audits = await this.getTenantAuditHistory.execute(id);
+      res.json({ success: true, data: audits });
+    } catch (error) {
+      console.error('Error in getAuditHistory controller:', error);
       res.status(500).json({
         success: false,
         error: 'Internal server error'

@@ -8,6 +8,7 @@ const tenantController = new TenantController();
 router.post('/', validateCreateTenant, tenantController.createTenant);
 router.get('/', tenantController.getAllTenants);
 router.get('/:id', tenantController.getTenantById);
+router.get('/:id/audits', tenantController.getAuditHistory);
 router.put('/:id', validateUpdateTenant, tenantController.updateTenant);
 router.delete('/:id', tenantController.deleteTenant);
 router.post('/:tenantId/setup/warehouse', tenantController.setupDefaultWarehouse);

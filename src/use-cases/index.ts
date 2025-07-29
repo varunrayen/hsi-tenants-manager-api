@@ -10,3 +10,4 @@ export * from './setup-default-customer';
 export * from './setup-default-super-admin';
 export * from './get-tenant-onboarding-progress';
 export * from './setup-default-entity-types';
+export * from './get-tenant-audit-history';

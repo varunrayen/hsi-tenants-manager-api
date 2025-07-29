@@ -13,8 +13,12 @@
         "header": [],
         "url": {
           "raw": "{{base_url}}/health",
-          "host": ["{{base_url}}"],
-          "path": ["health"]
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
         },
         "description": "Check if the API server is running"
       },
@@ -39,8 +43,13 @@
             },
             "url": {
               "raw": "{{base_url}}/api/tenants",
-              "host": ["{{base_url}}"],
-              "path": ["api", "tenants"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants"
+              ]
             },
             "description": "Create a new tenant with associated customer, warehouse, and super admin user"
           },
@@ -53,8 +62,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/tenants?page=1&limit=10",
-              "host": ["{{base_url}}"],
-              "path": ["api", "tenants"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -79,10 +93,37 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/tenants/{{tenant_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "tenants", "{{tenant_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants",
+                "{{tenant_id}}"
+              ]
             },
             "description": "Retrieve a specific tenant by ID with associated customer, warehouse, and super admin details"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tenant Audit History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tenants/{{tenant_id}}/audits",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants",
+                "{{tenant_id}}",
+                "audits"
+              ]
+            },
+            "description": "Retrieve audit history for a specific tenant showing all changes and modifications"
           },
           "response": []
         },
@@ -102,8 +143,14 @@
             },
             "url": {
               "raw": "{{base_url}}/api/tenants/{{tenant_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "tenants", "{{tenant_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants",
+                "{{tenant_id}}"
+              ]
             },
             "description": "Update an existing tenant's information"
           },
@@ -116,8 +163,14 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/tenants/{{tenant_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "tenants", "{{tenant_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants",
+                "{{tenant_id}}"
+              ]
             },
             "description": "Delete a tenant and all associated data (customer, warehouse, users, roles)"
           },
@@ -139,8 +192,16 @@
             },
             "url": {
               "raw": "{{base_url}}/api/tenants/{{tenant_id}}/setup/warehouse",
-              "host": ["{{base_url}}"],
-              "path": ["api", "tenants", "{{tenant_id}}", "setup", "warehouse"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants",
+                "{{tenant_id}}",
+                "setup",
+                "warehouse"
+              ]
             },
             "description": "Create a default warehouse for a tenant with predefined settings"
           },
@@ -162,8 +223,16 @@
             },
             "url": {
               "raw": "{{base_url}}/api/tenants/{{tenant_id}}/setup/customer",
-              "host": ["{{base_url}}"],
-              "path": ["api", "tenants", "{{tenant_id}}", "setup", "customer"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants",
+                "{{tenant_id}}",
+                "setup",
+                "customer"
+              ]
             },
             "description": "Create a default customer for a tenant with predefined settings"
           },
@@ -185,8 +254,16 @@
             },
             "url": {
               "raw": "{{base_url}}/api/tenants/{{tenant_id}}/setup/superadmin",
-              "host": ["{{base_url}}"],
-              "path": ["api", "tenants", "{{tenant_id}}", "setup", "superadmin"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants",
+                "{{tenant_id}}",
+                "setup",
+                "superadmin"
+              ]
             },
             "description": "Create a default super admin user for a tenant with full permissions"
           },
@@ -208,8 +285,16 @@
             },
             "url": {
               "raw": "{{base_url}}/api/tenants/{{tenant_id}}/setup/entities",
-              "host": ["{{base_url}}"],
-              "path": ["api", "tenants", "{{tenant_id}}", "setup", "entities"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants",
+                "{{tenant_id}}",
+                "setup",
+                "entities"
+              ]
             },
             "description": "Create default ADMIN and ASSOCIATE entity types (roles) for a tenant with predefined permissions"
           },
@@ -222,8 +307,16 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/tenants/{{tenant_id}}/onboarding/progress",
-              "host": ["{{base_url}}"],
-              "path": ["api", "tenants", "{{tenant_id}}", "onboarding", "progress"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tenants",
+                "{{tenant_id}}",
+                "onboarding",
+                "progress"
+              ]
             },
             "description": "Get the onboarding progress for a tenant including default customer, warehouse, and super admin details"
           },
