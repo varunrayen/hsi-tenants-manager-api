@@ -1,6 +1,5 @@
 export * from './base';
 export * from './create-tenant';
-export * from './create-tenant-direct';
 export * from './get-tenant';
 export * from './update-tenant';
 export * from './delete-tenant';

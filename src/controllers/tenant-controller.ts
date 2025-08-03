@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import {
-  CreateTenantDirectUseCase,
   CreateTenantUseCase,
   DeleteTenantUseCase,
   GetTenantOnboardingProgressUseCase,
@@ -16,7 +15,6 @@ import {
 
 export class TenantController {
   private createTenantUseCase: CreateTenantUseCase;
-  private createTenantDirectUseCase: CreateTenantDirectUseCase;
   private getTenantUseCase: GetTenantUseCase;
   private getTenantAuditHistory: GetTenantAuditHistory;
   private updateTenantUseCase: UpdateTenantUseCase;
@@ -30,7 +28,6 @@ export class TenantController {
 
   constructor() {
     this.createTenantUseCase = new CreateTenantUseCase();
-    this.createTenantDirectUseCase = new CreateTenantDirectUseCase();
     this.getTenantUseCase = new GetTenantUseCase();
     this.getTenantAuditHistory = new GetTenantAuditHistory();
     this.updateTenantUseCase = new UpdateTenantUseCase();
@@ -49,31 +46,16 @@ export class TenantController {
       const userEmail = req.headers['x-user-email'] as string;
       const userName = req.headers['x-user-name'] as string;
       
-      // Check if the request body contains nested structure or direct tenant data
-      const isNestedStructure = req.body.tenant !== undefined;
+      // Add user info to request for audit logging
+      const requestWithUser = {
+        ...req.body,
+        performedBy: {
+          username: userName || 'unknown',
+          email: userEmail
+        }
+      };
       
-      let result;
-      if (isNestedStructure) {
-        // Add user info to request for audit logging
-        const requestWithUser = {
-          ...req.body,
-          performedBy: {
-            username: userName || 'unknown',
-            email: userEmail
-          }
-        };
-        result = await this.createTenantUseCase.execute(requestWithUser);
-      } else {
-        // Add user info to request for audit logging
-        const requestWithUser = {
-          ...req.body,
-          performedBy: {
-            username: userName || 'unknown',
-            email: userEmail
-          }
-        };
-        result = await this.createTenantDirectUseCase.execute(requestWithUser);
-      }
+      const result = await this.createTenantUseCase.execute(requestWithUser);
 
       if (result.success) {
         res.status(201).json(result);
