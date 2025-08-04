@@ -225,6 +225,7 @@ export class TenantController {
   public setupDefaultWarehouse = async (req: Request, res: Response): Promise<void> => {
     try {
       const { tenantId } = req.params;
+      const region = req.headers['x-region'] as string;
       
       if (!tenantId) {
         res.status(400).json({
@@ -234,7 +235,10 @@ export class TenantController {
         return;
       }
 
-      const result = await this.setupDefaultWarehouseUseCase.execute({ tenantId });
+      const result = await this.setupDefaultWarehouseUseCase.execute({ 
+        tenantId,
+        region 
+      });
 
       if (result.success) {
         res.status(201).json(result);
@@ -253,6 +257,7 @@ export class TenantController {
   public setupDefaultCustomer = async (req: Request, res: Response): Promise<void> => {
     try {
       const { tenantId } = req.params;
+      const region = req.headers['x-region'] as string;
       
       if (!tenantId) {
         res.status(400).json({
@@ -264,6 +269,7 @@ export class TenantController {
 
       const result = await this.setupDefaultCustomerUseCase.execute({ 
         tenantId,
+        region,
         ...req.body 
       });
 
@@ -284,6 +290,7 @@ export class TenantController {
   public setupDefaultSuperAdmin = async (req: Request, res: Response): Promise<void> => {
     try {
       const { tenantId } = req.params;
+      const region = req.headers['x-region'] as string;
       
       if (!tenantId) {
         res.status(400).json({
@@ -293,7 +300,10 @@ export class TenantController {
         return;
       }
 
-      const result = await this.setupDefaultSuperAdminUseCase.execute({ tenantId });
+      const result = await this.setupDefaultSuperAdminUseCase.execute({ 
+        tenantId,
+        region 
+      });
 
       if (result.success) {
         res.status(201).json(result);
@@ -340,6 +350,7 @@ export class TenantController {
   public setupDefaultEntityTypes = async (req: Request, res: Response): Promise<void> => {
     try {
       const { tenantId } = req.params;
+      const region = req.headers['x-region'] as string;
       
       if (!tenantId) {
         res.status(400).json({
@@ -349,7 +360,10 @@ export class TenantController {
         return;
       }
 
-      const result = await this.setupDefaultEntityTypesUseCase.execute({ tenantId });
+      const result = await this.setupDefaultEntityTypesUseCase.execute({ 
+        tenantId,
+        region 
+      });
 
       if (result.success) {
         res.status(201).json(result);

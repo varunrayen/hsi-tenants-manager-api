@@ -1,10 +1,18 @@
 import { ICustomer } from '../types';
-import { Customer } from '../models';
+import { Customer, CustomerSchema } from '../models';
 import { BaseService } from './base-service';
+import { Connection } from 'mongoose';
 
 export class CustomerService extends BaseService<ICustomer> {
-  constructor() {
-    super(Customer);
+  constructor(connection?: Connection) {
+    if (connection) {
+      // Use the regional connection to get the model
+      const regionalModel = connection.model<ICustomer>('Customer', CustomerSchema);
+      super(regionalModel);
+    } else {
+      // Use the default model
+      super(Customer);
+    }
   }
 
   async findByTenantId(tenantId: string): Promise<ICustomer | null> {

@@ -1,9 +1,11 @@
 import { EntityTypeService } from '../services';
+import RegionalServiceFactory from '../services/regional-service-factory';
 import { IUseCase, UseCaseResponse } from './base';
 import { IEntityType } from '../types';
 
 interface SetupDefaultEntityTypesRequest {
   tenantId: string;
+  region?: string;
 }
 
 interface SetupEntityTypesResponse {
@@ -12,15 +14,20 @@ interface SetupEntityTypesResponse {
 }
 
 export class SetupDefaultEntityTypesUseCase implements IUseCase<SetupDefaultEntityTypesRequest, UseCaseResponse<SetupEntityTypesResponse>> {
-  private entityTypeService: EntityTypeService;
+  private regionalFactory: RegionalServiceFactory;
 
   constructor() {
-    this.entityTypeService = new EntityTypeService();
+    this.regionalFactory = RegionalServiceFactory.getInstance();
   }
 
   async execute(request: SetupDefaultEntityTypesRequest): Promise<UseCaseResponse<SetupEntityTypesResponse>> {
     try {
-      const { tenantId } = request;
+      const { tenantId, region } = request;
+
+      // Get the appropriate entity type service based on region
+      const entityTypeService = region 
+        ? await this.regionalFactory.getEntityTypeService(region)
+        : new EntityTypeService();
 
       // Admin role data based on sample schema
       const adminRoleData = {
@@ -297,8 +304,8 @@ export class SetupDefaultEntityTypesUseCase implements IUseCase<SetupDefaultEnti
       };
 
       // Create both roles
-      const adminRole = await this.entityTypeService.create(adminRoleData);
-      const associateRole = await this.entityTypeService.create(associateRoleData);
+      const adminRole = await entityTypeService.create(adminRoleData);
+      const associateRole = await entityTypeService.create(associateRoleData);
 
       return {
         success: true,

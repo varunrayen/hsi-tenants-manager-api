@@ -1,10 +1,18 @@
 import { IEntityType } from '../types';
-import { EntityType } from '../models';
+import { EntityType, EntityTypeSchema } from '../models';
 import { BaseService } from './base-service';
+import { Connection } from 'mongoose';
 
 export class EntityTypeService extends BaseService<IEntityType> {
-  constructor() {
-    super(EntityType);
+  constructor(connection?: Connection) {
+    if (connection) {
+      // Use the regional connection to get the model
+      const regionalModel = connection.model<IEntityType>('EntityType', EntityTypeSchema);
+      super(regionalModel);
+    } else {
+      // Use the default model
+      super(EntityType);
+    }
   }
 
   async findByTenantId(tenantId: string): Promise<IEntityType[]> {

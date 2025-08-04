@@ -1,21 +1,30 @@
 import { WarehouseService } from '../services';
+import RegionalServiceFactory from '../services/regional-service-factory';
 import { IUseCase, UseCaseResponse } from './base';
 import { IWarehouse } from '../types';
 
 interface SetupDefaultWarehouseRequest {
   tenantId: string;
+  region?: string;
 }
 
 export class SetupDefaultWarehouseUseCase implements IUseCase<SetupDefaultWarehouseRequest, UseCaseResponse<IWarehouse>> {
-  private warehouseService: WarehouseService;
+  private regionalFactory: RegionalServiceFactory;
 
   constructor() {
-    this.warehouseService = new WarehouseService();
+    this.regionalFactory = RegionalServiceFactory.getInstance();
   }
 
   async execute(request: SetupDefaultWarehouseRequest): Promise<UseCaseResponse<IWarehouse>> {
     try {
-      const { tenantId } = request;
+      const { tenantId, region } = request;
+
+      console.log("region", region);
+
+      // Get the appropriate warehouse service based on region
+      const warehouseService = region 
+        ? await this.regionalFactory.getWarehouseService(region)
+        : new WarehouseService();
 
       const defaultWarehouseData = {
         name: "Default Warehouse",
@@ -37,7 +46,7 @@ export class SetupDefaultWarehouseUseCase implements IUseCase<SetupDefaultWareho
         storageTypes: ["Ambient"]
       };
 
-      const warehouse = await this.warehouseService.create(defaultWarehouseData);
+      const warehouse = await warehouseService.create(defaultWarehouseData);
 
       return {
         success: true,

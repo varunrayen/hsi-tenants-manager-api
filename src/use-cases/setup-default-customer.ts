@@ -1,22 +1,29 @@
 import { CustomerService } from '../services';
+import RegionalServiceFactory from '../services/regional-service-factory';
 import { IUseCase, UseCaseResponse } from './base';
 import { ICustomer } from '../types';
 
 interface SetupDefaultCustomerRequest {
   tenantId: string;
   warehouses?: string[];
+  region?: string;
 }
 
 export class SetupDefaultCustomerUseCase implements IUseCase<SetupDefaultCustomerRequest, UseCaseResponse<ICustomer>> {
-  private customerService: CustomerService;
+  private regionalFactory: RegionalServiceFactory;
 
   constructor() {
-    this.customerService = new CustomerService();
+    this.regionalFactory = RegionalServiceFactory.getInstance();
   }
 
   async execute(request: SetupDefaultCustomerRequest): Promise<UseCaseResponse<ICustomer>> {
     try {
-      const { tenantId, warehouses } = request;
+      const { tenantId, warehouses, region } = request;
+
+      // Get the appropriate customer service based on region
+      const customerService = region 
+        ? await this.regionalFactory.getCustomerService(region)
+        : new CustomerService();
 
       const defaultCustomerData = {
         name: "Default",
@@ -39,7 +46,7 @@ export class SetupDefaultCustomerUseCase implements IUseCase<SetupDefaultCustome
         }
       };
 
-      const customer = await this.customerService.create(defaultCustomerData);
+      const customer = await customerService.create(defaultCustomerData);
 
       return {
         success: true,

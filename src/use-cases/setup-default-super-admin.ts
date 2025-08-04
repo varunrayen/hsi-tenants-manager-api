@@ -1,21 +1,28 @@
 import { UserService } from '../services';
+import RegionalServiceFactory from '../services/regional-service-factory';
 import { IUseCase, UseCaseResponse } from './base';
 import { IUser } from '../types';
 
 interface SetupDefaultSuperAdminRequest {
   tenantId: string;
+  region?: string;
 }
 
 export class SetupDefaultSuperAdminUseCase implements IUseCase<SetupDefaultSuperAdminRequest, UseCaseResponse<IUser>> {
-  private userService: UserService;
+  private regionalFactory: RegionalServiceFactory;
 
   constructor() {
-    this.userService = new UserService();
+    this.regionalFactory = RegionalServiceFactory.getInstance();
   }
 
   async execute(request: SetupDefaultSuperAdminRequest): Promise<UseCaseResponse<IUser>> {
     try {
-      const { tenantId } = request;
+      const { tenantId, region } = request;
+
+      // Get the appropriate user service based on region
+      const userService = region 
+        ? await this.regionalFactory.getUserService(region)
+        : new UserService();
 
       const defaultSuperAdminData = {
         name: "Super Admin",
@@ -69,7 +76,7 @@ export class SetupDefaultSuperAdminUseCase implements IUseCase<SetupDefaultSuper
         activated: true,
       };
 
-      const superAdmin = await this.userService.create(defaultSuperAdminData);
+      const superAdmin = await userService.create(defaultSuperAdminData);
 
       return {
         success: true,

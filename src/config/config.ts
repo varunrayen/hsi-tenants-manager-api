@@ -17,6 +17,11 @@ const config: Config = {
       serverSelectionTimeoutMS: parseInt(process.env.DB_SERVER_SELECTION_TIMEOUT || '5000', 10),
       socketTimeoutMS: parseInt(process.env.DB_SOCKET_TIMEOUT || '45000', 10),
     },
+    // Regional database URIs
+    regional: {
+      usEast1: process.env.MONGODB_URI_US_EAST_1 || '',
+      apSoutheast1: process.env.MONGODB_URI_AP_SOUTHEAST_1 || process.env.MONGODB_URI || 'mongodb://localhost:27017/?directConnection=true',
+    },
   },
   
   // Security Configuration

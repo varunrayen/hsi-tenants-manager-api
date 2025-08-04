@@ -11,6 +11,11 @@ export interface Config {
       serverSelectionTimeoutMS: number;
       socketTimeoutMS: number;
     };
+    // Regional database URIs
+    regional: {
+      usEast1: string;
+      apSoutheast1: string;
+    };
   };
   
   // Security Configuration

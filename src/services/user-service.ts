@@ -1,11 +1,19 @@
 import { IUser } from '../types';
-import { User } from '../models';
+import { User, UserSchema } from '../models';
 import { BaseService } from './base-service';
 import { hashPassword } from '../utils/helpers';
+import { Connection } from 'mongoose';
 
 export class UserService extends BaseService<IUser> {
-  constructor() {
-    super(User);
+  constructor(connection?: Connection) {
+    if (connection) {
+      // Use the regional connection to get the model
+      const regionalModel = connection.model<IUser>('User', UserSchema);
+      super(regionalModel);
+    } else {
+      // Use the default model
+      super(User);
+    }
   }
 
   async createSuperAdmin(tenantId: string, userData: any, session?: any): Promise<IUser> {

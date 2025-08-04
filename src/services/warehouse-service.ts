@@ -1,10 +1,18 @@
 import { IWarehouse } from '../types';
-import { Warehouse } from '../models';
+import { Warehouse, WarehouseSchema } from '../models';
 import { BaseService } from './base-service';
+import { Connection } from 'mongoose';
 
 export class WarehouseService extends BaseService<IWarehouse> {
-  constructor() {
-    super(Warehouse);
+  constructor(connection?: Connection) {
+    if (connection) {
+      // Use the regional connection to get the model
+      const regionalModel = connection.model<IWarehouse>('Warehouse', WarehouseSchema);
+      super(regionalModel);
+    } else {
+      // Use the default model
+      super(Warehouse);
+    }
   }
 
   async findByTenantId(tenantId: string): Promise<IWarehouse | null> {
