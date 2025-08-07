@@ -61,7 +61,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/tenants?page=1&limit=10",
+              "raw": "{{base_url}}/api/tenants?page=1&limit=10&search=vault",
               "host": [
                 "{{base_url}}"
               ],
@@ -79,6 +79,11 @@
                   "key": "limit",
                   "value": "10",
                   "description": "Number of items per page (default: 10)"
+                },
+                {
+                  "key": "search",
+                  "value": "vault",
+                  "description": "Search term to filter tenants by name, subdomain, or business name"
                 }
               ]
             },

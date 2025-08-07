@@ -11,7 +11,7 @@ const config: Config = {
   
   // Database Configuration
   mongodb: {
-    uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/?directConnection=true',
+    uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/?replicaSet=rs0&directConnection=true',
     dbName: process.env.DB_NAME || 'platform-dev',
     options: {
       serverSelectionTimeoutMS: parseInt(process.env.DB_SERVER_SELECTION_TIMEOUT || '5000', 10),
@@ -19,8 +19,8 @@ const config: Config = {
     },
     // Regional database URIs
     regional: {
-      usEast1: process.env.MONGODB_URI_US_EAST_1 || '',
-      apSoutheast1: process.env.MONGODB_URI_AP_SOUTHEAST_1 || process.env.MONGODB_URI || 'mongodb://localhost:27017/?directConnection=true',
+      usEast1: process.env.MONGODB_URI_US_EAST_1 || 'mongodb://localhost:27017/?replicaSet=rs0&directConnection=true',
+      apSoutheast1: process.env.MONGODB_URI_AP_SOUTHEAST_1 || 'mongodb://localhost:27017/?replicaSet=rs0&directConnection=true',
     },
   },
   

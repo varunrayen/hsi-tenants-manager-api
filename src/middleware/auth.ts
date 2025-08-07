@@ -34,6 +34,34 @@ export const authenticateToken = async (req: AuthenticatedRequest, res: Response
   }
 };
 
+export const requireTenantManagementPermission = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+  const userEmail = req.headers['x-user-email'] as string;
+  const userName = req.headers['x-user-name'] as string;
+
+  if (!userEmail || !userName) {
+    res.status(401).json({
+      success: false,
+      error: 'User authentication headers required (x-user-email, x-user-name)'
+    });
+    return;
+  }
+
+  const allowedEmails = [
+    'dinu@hopstack.io',
+    // 'varun@hopstack.io'
+  ];
+  
+  if (!allowedEmails.includes(userEmail.toLowerCase())) {
+    res.status(403).json({
+      success: false,
+      error: 'Insufficient permissions. Only authorized users can manage tenants.'
+    });
+    return;
+  }
+
+  next();
+};
+
 export const requirePermission = (permission: string) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
     const user = req.user;
