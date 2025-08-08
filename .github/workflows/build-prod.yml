@@ -1,8 +1,8 @@
 name: Build and Push to ECR - PROD
 
 on:
-  # Manual trigger to control when prod images are created
-  workflow_dispatch:
+  push:
+    branches: ["main"]
 
 concurrency:
   group: ecr-prod
