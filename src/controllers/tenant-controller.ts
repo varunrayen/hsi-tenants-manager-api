@@ -76,8 +76,12 @@ export class TenantController {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
       const search = req.query.search as string;
+      const statusQuery = (req.query.status as string) || 'all';
+      const status = (['active', 'inactive', 'all'] as const).includes(statusQuery as any)
+        ? (statusQuery as 'active' | 'inactive' | 'all')
+        : 'all';
 
-      const result = await this.listTenantsUseCase.execute({ page, limit, search });
+      const result = await this.listTenantsUseCase.execute({ page, limit, search, status });
 
       if (result.success) {
         res.json({

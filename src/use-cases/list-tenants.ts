@@ -4,6 +4,7 @@ import { ITenant } from '../types';
 
 interface ListTenantsRequest extends PaginationRequest {
   search?: string;
+  status?: 'active' | 'inactive' | 'all';
 }
 
 export class ListTenantsUseCase implements IUseCase<ListTenantsRequest, UseCaseResponse<PaginationResponse<ITenant>>> {
@@ -26,6 +27,13 @@ export class ListTenantsUseCase implements IUseCase<ListTenantsRequest, UseCaseR
           { subdomain: { $regex: request.search, $options: 'i' } },
           { 'profile.businessName': { $regex: request.search, $options: 'i' } }
         ];
+      }
+
+      // Apply status filter if provided
+      if (request.status === 'active') {
+        filter.active = true;
+      } else if (request.status === 'inactive') {
+        filter.active = false;
       }
 
       const tenants = await this.tenantService.find(filter, { skip, limit });
