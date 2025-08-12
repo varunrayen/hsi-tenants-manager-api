@@ -22,6 +22,7 @@ export interface Config {
   security: {
     jwtSecret: string | undefined;
     bcryptRounds: number;
+    allowedEmails: string[];
   };
   
   // Application Configuration

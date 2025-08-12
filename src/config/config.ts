@@ -28,6 +28,11 @@ const config: Config = {
   security: {
     jwtSecret: process.env.JWT_SECRET,
     bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS || '10', 10),
+    allowedEmails: (process.env.ALLOWED_EMAILS
+      ? process.env.ALLOWED_EMAILS.split(',')
+          .map((email) => email.trim().toLowerCase())
+          .filter((email) => email.length > 0)
+      : []),
   },
   
   // Application Configuration

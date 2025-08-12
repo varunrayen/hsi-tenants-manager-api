@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import config from '../config/config';
 
 export interface AuthenticatedRequest extends Request {
   user?: {
@@ -46,11 +47,8 @@ export const requireTenantManagementPermission = (req: AuthenticatedRequest, res
     return;
   }
 
-  const allowedEmails = [
-    'dinu@hopstack.io',
-    // 'varun@hopstack.io'
-  ];
-  
+  const allowedEmails = config.security.allowedEmails;
+
   if (!allowedEmails.includes(userEmail.toLowerCase())) {
     res.status(403).json({
       success: false,
